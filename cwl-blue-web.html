@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Czech Whoop League – Malé drony. Velké zážitky.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:      #06080f;
+    --deep:       #080c18;
+    --blue:       #1A6BFF;
+    --blue-bright:#2979FF;
+    --blue-glow:  #4D9FFF;
+    --blue-dark:  #1050CC;
+    --blue-subtle:#0e1a35;
+    --cyan:       #00CFFF;
+    --white:      #ffffff;
+    --off-white:  #e8eef8;
+    --gray:       #7a8aaa;
+    --gray-mid:   #2a3348;
+    --gray-light: #111827;
+    --surface:    #0d1420;
+    --border:     rgba(26,107,255,0.15);
+    --border-dim: rgba(255,255,255,0.05);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 68px;
+    background: rgba(6,8,15,0.92);
+    border-bottom: 1px solid var(--border-dim);
+    backdrop-filter: blur(16px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+  }
+
+  .nav-logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .nav-logo-text span:first-child {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+  }
+
+  .nav-logo-text span:last-child {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--blue-glow);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--blue) !important;
+    color: var(--white) !important;
+    padding: 9px 22px !important;
+    font-size: 12px !important;
+    letter-spacing: 0.15em !important;
+    transition: background 0.2s, box-shadow 0.2s !important;
+  }
+
+  .nav-cta:hover {
+    background: var(--blue-bright) !important;
+    box-shadow: 0 0 24px rgba(26,107,255,0.5) !important;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--black);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 55% 60% at 72% 50%, rgba(26,107,255,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 30% 40% at 95% 15%, rgba(0,207,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 5% 90%, rgba(26,107,255,0.06) 0%, transparent 70%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(26,107,255,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,107,255,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 90% 80% at 60% 50%, black 20%, transparent 100%);
+  }
+
+  /* Scan lines effect */
+  .hero-scan {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.05) 2px,
+      rgba(0,0,0,0.05) 4px
+    );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 130px 48px 100px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+  }
+
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(64px, 8vw, 108px);
+    line-height: 0.88;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 36px;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--blue);
+    position: relative;
+  }
+
+  .hero-title .highlight {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--gray);
+    max-width: 440px;
+    margin-bottom: 52px;
+  }
+
+  .hero-actions { display: flex; gap: 16px; align-items: center; }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue);
+    color: var(--white);
+    padding: 16px 34px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: var(--blue-bright);
+    box-shadow: 0 0 40px rgba(26,107,255,0.55), 0 0 80px rgba(26,107,255,0.2);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray);
+    padding: 16px 26px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border-dim);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--blue);
+    color: var(--white);
+  }
+
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-drone-wrap {
+    position: relative;
+    width: 420px;
+    height: 420px;
+  }
+
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: spin linear infinite;
+  }
+
+  .ring-1 {
+    inset: 0;
+    border-color: rgba(26,107,255,0.35);
+    animation-duration: 22s;
+    box-shadow: 0 0 30px rgba(26,107,255,0.08) inset;
+  }
+
+  .ring-2 {
+    inset: 30px;
+    border-color: rgba(0,207,255,0.15);
+    animation-duration: 16s;
+    animation-direction: reverse;
+  }
+
+  .ring-3 {
+    inset: 70px;
+    border-color: rgba(26,107,255,0.2);
+    animation-duration: 28s;
+    border-style: dashed;
+  }
+
+  .ring-4 {
+    inset: 120px;
+    border-color: rgba(0,207,255,0.1);
+    animation-duration: 12s;
+    animation-direction: reverse;
+  }
+
+  /* Dots on rings */
+  .ring-1::before, .ring-1::after {
+    content: '';
+    position: absolute;
+    width: 8px; height: 8px;
+    background: var(--blue);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--blue);
+    top: 50%; left: -4px;
+    transform: translateY(-50%);
+  }
+  .ring-1::after { left: auto; right: -4px; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+
+  .hero-drone-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .drone-glow {
+    position: absolute;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(26,107,255,0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  .hero-stat-badge {
+    position: absolute;
+    background: rgba(13,20,32,0.9);
+    border: 1px solid var(--border);
+    padding: 14px 22px;
+    backdrop-filter: blur(8px);
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+
+  .hero-stat-badge .num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 30px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    line-height: 1;
+  }
+
+  .hero-stat-badge .label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .badge-1 { top: 20px; right: -30px; }
+  .badge-2 { bottom: 70px; left: -30px; }
+  .badge-3 { bottom: 20px; right: 20px; }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.3); opacity: 0.3; }
+  }
+
+  /* ─── TICKER ─── */
+  .ticker {
+    overflow: hidden;
+    padding: 14px 0;
+    background: var(--blue-dark);
+    border-top: 1px solid rgba(26,107,255,0.4);
+    border-bottom: 1px solid rgba(26,107,255,0.4);
+    position: relative;
+  }
+
+  .ticker::before, .ticker::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 80px;
+    z-index: 2;
+  }
+
+  .ticker::before { left: 0; background: linear-gradient(90deg, var(--blue-dark), transparent); }
+  .ticker::after  { right: 0; background: linear-gradient(-90deg, var(--blue-dark), transparent); }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 22s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    padding: 0 44px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 44px;
+  }
+
+  .ticker-item::after {
+    content: '◆';
+    color: var(--cyan);
+    font-size: 8px;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── SPONSORS ─── */
+  .sponsors {
+    border-bottom: 1px solid var(--border-dim);
+    padding: 36px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 72px;
+    background: var(--surface);
+  }
+
+  .sponsors-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gray);
+    white-space: nowrap;
+  }
+
+  .sponsors-logos { display: flex; align-items: center; gap: 52px; }
+
+  .sponsor-item {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    color: #3a4a6a;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .sponsor-item:hover { color: var(--blue-glow); }
+
+  /* ─── RACES ─── */
+  .races-section { background: var(--surface); border-top: 1px solid var(--border-dim); border-bottom: 1px solid var(--border-dim); }
+
+  .races-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 90px 48px;
+  }
+
+  .races-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 52px;
+  }
+
+  .races-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: rgba(26,107,255,0.08);
+  }
+
+  .race-card {
+    background: var(--black);
+    padding: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    transition: background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .race-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+
+  .race-card:hover::before { transform: scaleX(1); }
+  .race-card:hover { background: var(--deep); }
+
+  .race-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blue-glow);
+  }
+
+  .race-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 34px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--white);
+  }
+
+  .race-meta { display: flex; flex-direction: column; gap: 8px; color: var(--gray); font-size: 14px; }
+  .race-meta strong { color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 17px; }
+
+  .race-img {
+    width: 100%;
+    aspect-ratio: 16/7;
+    background: var(--blue-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .race-img-inner {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(26,107,255,0.1), rgba(0,207,255,0.05));
+    font-size: 64px;
+    filter: drop-shadow(0 0 24px rgba(26,107,255,0.5));
+  }
+
+  /* ─── SECTION HELPERS ─── */
+  .sec {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 100px 48px;
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--blue-glow);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .section-label::before {
+    content: '';
+    width: 28px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: clamp(42px, 5vw, 68px);
+    text-transform: uppercase;
+    line-height: 0.93;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+
+  /* ─── COMMUNITY ─── */
+  .community-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .community-image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+
+  .comm-img {
+    aspect-ratio: 1;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    border: 1px solid var(--border-dim);
+    transition: border-color 0.2s;
+  }
+
+  .comm-img:first-child { grid-column: span 2; aspect-ratio: 2/1; }
+  .comm-img:hover { border-color: var(--border); }
+
+  .community-text p {
+    color: var(--gray);
+    line-height: 1.75;
+    margin-bottom: 36px;
+  }
+
+  .social-links { display: flex; gap: 14px; }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border: 1px solid var(--border-dim);
+    color: var(--gray);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+    transition: all 0.2s;
+  }
+
+  .social-link:hover { border-color: var(--blue); color: var(--blue-glow); }
+
+  /* ─── STEPS ─── */
+  .steps-outer {
+    background: linear-gradient(135deg, var(--blue-dark) 0%, #0a2a6a 60%, var(--blue-dark) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .steps-outer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .steps-inner { max-width: 1240px; margin: 0 auto; padding: 90px 48px; position: relative; }
+
+  .steps-header { margin-bottom: 56px; }
+  .steps-header .section-label { color: rgba(255,255,255,0.6); }
+  .steps-header .section-label::before { background: rgba(255,255,255,0.4); }
+
+  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(0,0,0,0.2); }
+
+  .step-card {
+    background: rgba(0,0,0,0.25);
+    padding: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .step-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0,207,255,0.6), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .step-card:hover::after { transform: scaleX(1); }
+  .step-card:hover { background: rgba(0,0,0,0.4); }
+
+  .step-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(255,255,255,0.08);
+  }
+
+  .step-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--white);
+  }
+
+  .step-desc { font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.55); }
+
+  .step-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cyan);
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: auto;
+    transition: gap 0.2s;
+  }
+
+  .step-link:hover { gap: 16px; }
+
+  /* ─── TEAM ─── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border-dim);
+    margin-top: 52px;
+  }
+
+  .team-card {
+    background: var(--black);
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .team-card:hover { background: var(--surface); }
+
+  .team-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--blue-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    border: 2px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .team-card:hover .team-avatar {
+    border-color: var(--blue);
+    box-shadow: 0 0 20px rgba(26,107,255,0.3);
+  }
+
+  .team-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: var(--white);
+    letter-spacing: 0.04em;
+  }
+
+  .team-role {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--blue-glow);
+  }
+
+  /* ─── CONTEST ─── */
+  .contest-outer {
+    background: var(--surface);
+    border-top: 1px solid var(--border-dim);
+    border-bottom: 1px solid var(--border-dim);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contest-outer::before {
+    content: '';
+    position: absolute;
+    right: -100px; top: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(26,107,255,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .contest-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 90px 48px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 80px;
+    position: relative;
+  }
+
+  .contest-emoji {
+    font-size: 130px;
+    filter: drop-shadow(0 0 50px rgba(26,107,255,0.5));
+    animation: float 5s ease-in-out infinite;
+  }
+
+  .contest-title em { font-style: normal; color: transparent; -webkit-text-stroke: 2px var(--blue); }
+
+  .contest-desc { color: var(--gray); line-height: 1.75; margin: 20px 0 36px; max-width: 540px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--deep);
+    border-top: 1px solid var(--border-dim);
+  }
+
+  .footer-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 72px 48px 36px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .footer-brand-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--white) 40%, var(--blue-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer-brand p { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 8px; }
+
+  .footer-col h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 22px;
+  }
+
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+  .footer-col ul a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-col ul a::before { content: '›'; color: var(--blue); font-size: 16px; }
+  .footer-col ul a:hover { color: var(--white); }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-copy { font-size: 12px; color: #2a3a5a; }
+
+  .footer-social { display: flex; gap: 12px; }
+
+  .footer-social a {
+    width: 38px; height: 38px;
+    border: 1px solid var(--border-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 15px;
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+  }
+
+  .footer-social a:hover {
+    border-color: var(--blue);
+    color: var(--blue-glow);
+    box-shadow: 0 0 16px rgba(26,107,255,0.25);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-left { animation: fadeUp 0.8s 0.1s ease both; }
+  .hero-visual { animation: fadeUp 0.8s 0.35s ease both; }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 960px) {
+    .hero-content { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .races-grid { grid-template-columns: 1fr; }
+    .community-section { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .contest-inner { grid-template-columns: 1fr; }
+    .contest-emoji { display: none; }
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .sec, .races-inner, .steps-inner, .contest-inner, .footer-inner { padding: 60px 24px; }
+    .sponsors { padding: 28px 24px; gap: 32px; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+      <circle cx="8"  cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="32" cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="8"  cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="32" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="20" cy="20" r="5" fill="#1A6BFF"/>
+      <circle cx="20" cy="20" r="3" fill="#00CFFF"/>
+      <line x1="12" y1="8"  x2="27" y2="8"  stroke="#4D9FFF" stroke-width="1.5"/>
+      <line x1="12" y1="32" x2="27" y2="32" stroke="#4D9FFF" stroke-width="1.5"/>
+      <line x1="8"  y1="12" x2="8"  y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+      <line x1="32" y1="12" x2="32" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+      <line x1="12" y1="12" x2="16" y2="16" stroke="#4D9FFF" stroke-width="1" opacity="0.5"/>
+      <line x1="28" y1="12" x2="24" y2="16" stroke="#4D9FFF" stroke-width="1" opacity="0.5"/>
+      <line x1="12" y1="28" x2="16" y2="24" stroke="#4D9FFF" stroke-width="1" opacity="0.5"/>
+      <line x1="28" y1="28" x2="24" y2="24" stroke="#4D9FFF" stroke-width="1" opacity="0.5"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span>CWL</span>
+      <span>Czech Whoop League</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#zavody">Závody</a></li>
+    <li><a href="#liga">Liga</a></li>
+    <li><a href="#trening">Jak začít</a></li>
+    <li><a href="#pravidla">Pravidla</a></li>
+    <li><a href="#tym">Tým</a></li>
+    <li><a href="#kontakt">Kontakty</a></li>
+    <li><a href="#trening" class="nav-cta">Přihlásit →</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-scan"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Sezóna 2026 · Praha</p>
+      <h1 class="hero-title">
+        Malé<br>
+        drony.<br>
+        <span class="highlight">Velké</span><br>
+        zážitky.
+      </h1>
+      <p class="hero-desc">Oficiální česká liga pro závody a tréninky 1s FPV dronů. Připoj se ke komunitě, závoď, zažij adrenalin.</p>
+      <div class="hero-actions">
+        <a href="#trening" class="btn-primary">Jak začít →</a>
+        <a href="#zavody" class="btn-secondary">Kalendář závodů</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-drone-wrap">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="ring ring-4"></div>
+        <div class="hero-drone-center">
+          <div class="drone-glow"></div>
+          <svg width="140" height="140" viewBox="0 0 120 120" fill="none" style="position:relative;z-index:1;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(26,107,255,0.7))">
+            <circle cx="20"  cy="20"  r="14" stroke="#4D9FFF" stroke-width="2"/>
+            <circle cx="100" cy="20"  r="14" stroke="#4D9FFF" stroke-width="2"/>
+            <circle cx="20"  cy="100" r="14" stroke="#4D9FFF" stroke-width="2"/>
+            <circle cx="100" cy="100" r="14" stroke="#4D9FFF" stroke-width="2"/>
+            <circle cx="60" cy="60" r="13" fill="#1A6BFF"/>
+            <circle cx="60" cy="60" r="7"  fill="#00CFFF"/>
+            <line x1="33" y1="20"  x2="87" y2="20"  stroke="#4D9FFF" stroke-width="2"/>
+            <line x1="33" y1="100" x2="87" y2="100" stroke="#4D9FFF" stroke-width="2"/>
+            <line x1="20" y1="33"  x2="20" y2="87"  stroke="#4D9FFF" stroke-width="2"/>
+            <line x1="100" y1="33" x2="100" y2="87" stroke="#4D9FFF" stroke-width="2"/>
+            <line x1="33" y1="33" x2="49" y2="49"   stroke="#4D9FFF" stroke-width="1.5" opacity="0.5"/>
+            <line x1="87" y1="33" x2="71" y2="49"   stroke="#4D9FFF" stroke-width="1.5" opacity="0.5"/>
+            <line x1="33" y1="87" x2="49" y2="71"   stroke="#4D9FFF" stroke-width="1.5" opacity="0.5"/>
+            <line x1="87" y1="87" x2="71" y2="71"   stroke="#4D9FFF" stroke-width="1.5" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="hero-stat-badge badge-1">
+          <span class="num">6</span>
+          <span class="label">Závodů / sezóna</span>
+        </div>
+        <div class="hero-stat-badge badge-2">
+          <span class="num">40+</span>
+          <span class="label">Aktivních pilotů</span>
+        </div>
+        <div class="hero-stat-badge badge-3">
+          <span class="num">1s</span>
+          <span class="label">FPV Whoop</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TICKER ─── -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">Czech Whoop League</span>
+    <span class="ticker-item">Sezóna 2026</span>
+    <span class="ticker-item">Malé drony</span>
+    <span class="ticker-item">Velké zážitky</span>
+    <span class="ticker-item">FPV Racing Praha</span>
+    <span class="ticker-item">Indoor Whoop</span>
+    <span class="ticker-item">Czech Whoop League</span>
+    <span class="ticker-item">Sezóna 2026</span>
+    <span class="ticker-item">Malé drony</span>
+    <span class="ticker-item">Velké zážitky</span>
+    <span class="ticker-item">FPV Racing Praha</span>
+    <span class="ticker-item">Indoor Whoop</span>
+  </div>
+</div>
+
+<!-- ─── SPONSORS ─── -->
+<div class="sponsors">
+  <span class="sponsors-label">Naši sponzoři</span>
+  <div class="sponsors-logos">
+    <span class="sponsor-item">🚁 HobbyDrone</span>
+    <span class="sponsor-item">⚙ Rotorama</span>
+    <span class="sponsor-item">✕ FPV Racing</span>
+  </div>
+</div>
+
+<!-- ─── RACES ─── -->
+<div class="races-section" id="zavody">
+  <div class="races-inner">
+    <div class="races-header">
+      <div>
+        <p class="section-label">Kalendář</p>
+        <h2 class="section-title">Nejbližší<br>závody</h2>
+      </div>
+      <a href="#" class="btn-secondary">Celý kalendář →</a>
+    </div>
+    <div class="races-grid">
+      <div class="race-card reveal">
+        <span class="race-number">02 / Ligový závod</span>
+        <div class="race-img"><div class="race-img-inner">🏁</div></div>
+        <h3 class="race-title">2. Ligový závod</h3>
+        <div class="race-meta">
+          <strong>28. února 2026</strong>
+          <span>📍 Hostivice, Praha-západ</span>
+          <span>1s Whoop · Indoor racing</span>
+        </div>
+        <a href="#" class="btn-primary" style="align-self:flex-start;padding:12px 26px;font-size:13px;">Přihlásit se →</a>
+      </div>
+      <div class="race-card reveal">
+        <span class="race-number">03 / Ligový závod</span>
+        <div class="race-img"><div class="race-img-inner">🚀</div></div>
+        <h3 class="race-title">3. Ligový závod</h3>
+        <div class="race-meta">
+          <strong>28. března 2026</strong>
+          <span>📍 Hostivice, Praha-západ</span>
+          <span>1s Whoop · Indoor racing</span>
+        </div>
+        <a href="#" class="btn-primary" style="align-self:flex-start;padding:12px 26px;font-size:13px;">Přihlásit se →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── COMMUNITY ─── -->
+<section class="sec" id="liga">
+  <div class="community-section">
+    <div class="community-image-grid">
+      <div class="comm-img" style="font-size:64px;background:linear-gradient(135deg,var(--blue-subtle),#0a1830);">🎮</div>
+      <div class="comm-img">🏆</div>
+      <div class="comm-img">👾</div>
+      <div class="comm-img">🔧</div>
+    </div>
+    <div class="community-text reveal">
+      <p class="section-label">Komunita</p>
+      <h2 class="section-title">Chceš zažít<br>FPV závod?</h2>
+      <p>Stále plánujeme společné tréninky na různých místech v Praze a okolí. Sleduj nás na Facebooku a Instagramu, kde máme přes 4 000 sledujících.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">f · Facebook</a>
+        <a href="#" class="social-link">◎ · Instagram</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STEPS ─── -->
+<div class="steps-outer" id="trening">
+  <div class="steps-inner">
+    <div class="steps-header">
+      <p class="section-label">Začít je jednoduché</p>
+      <h2 class="section-title">Začni<br>s tréninkem</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-num">01</div>
+        <h3 class="step-title">Poříď si vybavení</h3>
+        <p class="step-desc">Projdi si doporučené vybavení pro začátečníky. Vše, co potřebuješ pro svůj první let.</p>
+        <a href="#" class="step-link">Jak začít →</a>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">02</div>
+        <h3 class="step-title">Přijď na trénink</h3>
+        <p class="step-desc">Přijď na nejbližší trénink a setkej se s komunitou. Pomůžeme ti s prvními lety.</p>
+        <a href="#" class="step-link">Tréninky →</a>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-num">03</div>
+        <h3 class="step-title">Přečti si pravidla</h3>
+        <p class="step-desc">Zjisti vše o pravidlech závodů Czech Whoop League a registraci do ligy.</p>
+        <a href="#" class="step-link">Pravidla →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── TEAM ─── -->
+<section class="sec" id="tym">
+  <p class="section-label">Za CWL stojí</p>
+  <h2 class="section-title">Náš tým</h2>
+  <p style="color:var(--gray);max-width:500px;margin-top:16px;">Nalézáme se v různých oblastech, všichni máme drony rádi – a chceme vám nabídnout co nejlepší zážitek.</p>
+  <div class="team-grid">
+    <div class="team-card reveal"><div class="team-avatar">👨‍💻</div><div class="team-name">David Vajt</div><div class="team-role">Race &amp; Media Manager</div></div>
+    <div class="team-card reveal"><div class="team-avatar">🎛</div><div class="team-name">Jiří Šimek</div><div class="team-role">Lead Timer Technician</div></div>
+    <div class="team-card reveal"><div class="team-avatar">🔧</div><div class="team-name">Jakub Folberger</div><div class="team-role">General Technician</div></div>
+    <div class="team-card reveal"><div class="team-avatar">🎵</div><div class="team-name">Petr Tenčík</div><div class="team-role">Event Soundmaster</div></div>
+    <div class="team-card reveal"><div class="team-avatar">🏁</div><div class="team-name">Daniel Habánák</div><div class="team-role">Lap Timer</div></div>
+    <div class="team-card reveal"><div class="team-avatar">⚙</div><div class="team-name">Tobiáš Kopečka</div><div class="team-role">General Technician</div></div>
+    <div class="team-card reveal"><div class="team-avatar">📸</div><div class="team-name">Připoj se</div><div class="team-role">Hledáme posilu</div></div>
+    <div class="team-card reveal" style="background:#050810">
+      <div class="team-avatar" style="background:transparent;border:2px dashed #1a2a45;font-size:22px;color:#1a2a45">+</div>
+      <div class="team-name" style="color:#1a2a45">Ty?</div>
+      <div class="team-role" style="color:#1a2a45">Jsme otevřeni</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTEST ─── -->
+<div class="contest-outer">
+  <div class="contest-inner">
+    <div class="reveal">
+      <p class="section-label">Speciální výzva</p>
+      <h2 class="section-title contest-title">Soutěž o<br><em>nejlehčího</em><br>Whoopa!</h2>
+      <p class="contest-desc">Myslíš, že máš whoopa nejlehčího a nejlepšího v celé Čechách? Zapoj se do speciální Featherweight Challenge a ukaž, komu se to dá zažít v exkluzivním závodním přívěsu.</p>
+      <a href="#" class="btn-primary">🏆 Podívej se na pravidla soutěže →</a>
+    </div>
+    <div class="contest-emoji">🚁</div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer id="kontakt">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:20px;display:flex;align-items:center;gap:12px;text-decoration:none;">
+          <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+            <circle cx="8" cy="8" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="32" cy="8" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="8" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="32" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="5" fill="#1A6BFF"/>
+            <circle cx="20" cy="20" r="3" fill="#00CFFF"/>
+            <line x1="12" y1="8" x2="27" y2="8" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="12" y1="32" x2="27" y2="32" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="8" y1="12" x2="8" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="32" y1="12" x2="32" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+          </svg>
+          <div class="nav-logo-text"><span>CWL</span><span>Czech Whoop League</span></div>
+        </div>
+        <div class="footer-brand-tagline">Malé drony.<br>Velké zážitky.</div>
+        <p>Oficiální česká liga pro závody a tréninky 1s FPV dronů.</p>
+        <p style="color:#3a4a6a;margin-top:8px;">info@whoopleague.cz</p>
+      </div>
+      <div class="footer-col">
+        <h4>Liga</h4>
+        <ul>
+          <li><a href="#">Tréninky</a></li>
+          <li><a href="#">Ligové závody</a></li>
+          <li><a href="#">Jak začít</a></li>
+          <li><a href="#">Pravidla</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>O nás</h4>
+        <ul>
+          <li><a href="#">Náš tým</a></li>
+          <li><a href="#">Kontakty</a></li>
+          <li><a href="#">Galerie</a></li>
+          <li><a href="#">Sponzorství</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Právní</h4>
+        <ul>
+          <li><a href="#">Podmínky</a></li>
+          <li><a href="#">GDPR</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Aliexpress</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 whoopleague.cz · Czech Whoop League</span>
+      <div class="footer-social">
+        <a href="#">f</a>
+        <a href="#">◎</a>
+        <a href="#">▶</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
