@@ -1,0 +1,3311 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CWL – Czech Whoop League 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400;700;900&family=Barlow+Condensed:wght@400;700;800;900&family=Barlow:wght@400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #020408;
+  --blue:    #00AAFF;
+  --cyan:    #00FFEE;
+  --pink:    #FF0080;
+  --yellow:  #FFE600;
+  --white:   #FFFFFF;
+  --dim:     rgba(255,255,255,0.06);
+  --dim2:    rgba(0,170,255,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  background: rgba(2,4,8,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,170,255,0.2);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-cwl {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  line-height: 1;
+}
+
+.nav-cwl span {
+  color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan), 0 0 40px rgba(0,255,238,0.3);
+}
+
+.nav-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: rgba(0,170,255,0.6);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--cyan); text-shadow: 0 0 12px var(--cyan); }
+
+.nav-reg {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--cyan);
+  padding: 8px 18px;
+  text-decoration: none;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.nav-reg:hover {
+  background: var(--white);
+  box-shadow: 0 0 30px rgba(0,255,238,0.8);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* Animated scan lines */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,170,255,0.015) 3px,
+    rgba(0,170,255,0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* BIG BG TEXT */
+.hero-bg-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(120px, 20vw, 300px);
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0,170,255,0.08);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+
+/* Grid lines */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(0,170,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,170,255,0.05) 1px, transparent 1px);
+  background-size: 80px 80px;
+  perspective: 800px;
+  transform: rotateX(20deg) scaleY(1.5) translateY(-20%);
+  transform-origin: bottom center;
+  mask-image: linear-gradient(to top, black 0%, transparent 60%);
+}
+
+/* Neon glow orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.orb-1 {
+  width: 500px; height: 500px;
+  background: rgba(0,170,255,0.12);
+  top: -100px; right: -100px;
+  animation: orb-drift 8s ease-in-out infinite alternate;
+}
+
+.orb-2 {
+  width: 300px; height: 300px;
+  background: rgba(0,255,238,0.08);
+  bottom: 20%; left: 5%;
+  animation: orb-drift 11s ease-in-out infinite alternate-reverse;
+}
+
+.orb-3 {
+  width: 200px; height: 200px;
+  background: rgba(255,0,128,0.06);
+  top: 40%; left: 60%;
+  animation: orb-drift 7s ease-in-out infinite alternate;
+}
+
+@keyframes orb-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(40px, 30px) scale(1.1); }
+}
+
+/* HERO CONTENT */
+.hero-inner {
+  position: relative;
+  z-index: 4;
+  padding: 0 48px 64px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.hero-left {}
+
+.hero-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-tag::before {
+  content: '>';
+  color: var(--pink);
+  font-size: 14px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.hero-h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 12vw, 160px);
+  line-height: 1.0;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.hero-h1 .line-1 { color: var(--white); display: block; }
+
+.hero-h1 .line-2 {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--cyan);
+  display: block;
+  text-shadow: none;
+  filter: drop-shadow(0 0 20px rgba(0,255,238,0.6));
+  animation: flicker 6s ease-in-out infinite;
+}
+
+.hero-h1 .line-3 {
+  display: block;
+  background: linear-gradient(90deg, var(--blue), var(--cyan), var(--blue));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+  from { background-position: 0% center; }
+  to { background-position: 200% center; }
+}
+
+@keyframes flicker {
+  0%, 90%, 100% { opacity: 1; }
+  92% { opacity: 0.7; }
+  94% { opacity: 1; }
+  96% { opacity: 0.5; }
+  98% { opacity: 1; }
+}
+
+/* glitch effect on hover */
+.hero-h1:hover .line-2 {
+  animation: glitch 0.3s step-end infinite;
+}
+
+@keyframes glitch {
+  0%  { text-shadow: 4px 0 var(--pink), -4px 0 var(--cyan); }
+  25% { text-shadow: -4px 0 var(--pink), 4px 0 var(--cyan); }
+  50% { text-shadow: 4px 2px var(--cyan), -4px -2px var(--pink); }
+  75% { text-shadow: 0 0 var(--pink); }
+  100%{ text-shadow: -4px 0 var(--cyan), 4px 0 var(--pink); }
+}
+
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.cta-main {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--cyan);
+  padding: 18px 40px;
+  text-decoration: none;
+  position: relative;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  transition: all 0.15s;
+  box-shadow: 0 0 0 rgba(0,255,238,0);
+}
+
+.cta-main:hover {
+  background: var(--white);
+  box-shadow: 0 0 60px rgba(0,255,238,0.7), 0 0 120px rgba(0,255,238,0.2);
+  transform: translateY(-2px);
+}
+
+.cta-main::before {
+  content: '//';
+  position: absolute;
+  left: -30px;
+  color: rgba(0,255,238,0.3);
+  font-size: 18px;
+}
+
+.cta-sec {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  border: 1px solid rgba(0,170,255,0.25);
+  padding: 17px 28px;
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+  transition: all 0.2s;
+}
+
+.cta-sec:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0,255,238,0.04);
+}
+
+/* hero right – stats */
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-self: flex-end;
+  padding-bottom: 8px;
+}
+
+.stat-item {
+  background: rgba(0,170,255,0.06);
+  border: 1px solid rgba(0,170,255,0.15);
+  border-left: 3px solid var(--cyan);
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+}
+
+.stat-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--cyan);
+  text-shadow: 0 0 20px rgba(0,255,238,0.5);
+  line-height: 1;
+}
+
+.stat-lbl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* bottom marquee strip */
+.hero-strip {
+  position: relative;
+  z-index: 5;
+  border-top: 1px solid rgba(0,170,255,0.3);
+  border-bottom: 1px solid rgba(0,170,255,0.3);
+  background: rgba(0,170,255,0.04);
+  overflow: hidden;
+  padding: 10px 0;
+  backdrop-filter: blur(4px);
+}
+
+/* ── TICKER ── */
+.ticker-wrap { overflow: hidden; }
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.ticker-item {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.2em;
+  color: rgba(0,170,255,0.5);
+  padding: 0 60px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.ticker-item span { color: var(--cyan); }
+.ticker-item::after { content: '◆'; font-size: 10px; color: var(--pink); margin-left: 60px; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── RACE CARDS ── */
+.section-block {
+  padding: 80px 48px;
+}
+
+.sec-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  gap: 20px;
+}
+
+.sec-eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sec-eyebrow::before { content: '//'; color: var(--pink); }
+
+.sec-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  color: var(--white);
+}
+
+.link-all {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(0,170,255,0.5);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,170,255,0.2);
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+
+.link-all:hover { color: var(--cyan); border-color: var(--cyan); }
+
+.races-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: rgba(0,170,255,0.05);
+}
+
+.race-card {
+  background: rgba(2,4,8,0.95);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s;
+  border: 1px solid rgba(0,170,255,0.08);
+}
+
+.race-card:hover { transform: scale(1.005); z-index: 2; }
+
+.race-card-img {
+  height: 200px;
+  background: linear-gradient(135deg, #020c18, #010810);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(0,170,255,0.15);
+}
+
+.race-card-img::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,170,255,0.12) 0%, transparent 70%);
+}
+
+/* live badge */
+.badge-live {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: var(--pink);
+  color: var(--white);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: pulse-badge 1.5s ease-in-out infinite;
+}
+
+.badge-live::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--white);
+}
+
+@keyframes pulse-badge {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.race-card-body { padding: 28px 32px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+
+.race-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.race-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  color: var(--white);
+}
+
+.race-info {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  line-height: 2;
+  letter-spacing: 0.05em;
+}
+
+.race-info strong { color: rgba(255,255,255,0.8); }
+
+.race-cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--cyan);
+  padding: 14px 28px;
+  text-decoration: none;
+  align-self: flex-start;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: all 0.15s;
+}
+
+.race-cta:hover {
+  background: var(--white);
+  box-shadow: 0 0 40px rgba(0,255,238,0.6);
+}
+
+/* ── SCOREBOARD ── */
+.scoreboard-section {
+  background: rgba(0,170,255,0.03);
+  border-top: 1px solid rgba(0,170,255,0.1);
+  border-bottom: 1px solid rgba(0,170,255,0.1);
+  padding: 80px 48px;
+}
+
+.leaderboard {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lb-header {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px 120px;
+  gap: 0;
+  padding: 10px 24px;
+  background: rgba(0,170,255,0.08);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(0,170,255,0.5);
+}
+
+.lb-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px 120px;
+  gap: 0;
+  padding: 18px 24px;
+  background: rgba(2,4,8,0.9);
+  border: 1px solid rgba(0,170,255,0.05);
+  align-items: center;
+  transition: background 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.lb-row::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: rgba(0,170,255,0.06);
+  transition: width 0.3s ease;
+}
+
+.lb-row:hover { background: rgba(0,20,40,0.95); }
+.lb-row:hover::before { width: 100%; }
+
+.lb-row.top-1 { border-left: 3px solid var(--yellow); }
+.lb-row.top-2 { border-left: 3px solid rgba(180,180,180,0.6); }
+.lb-row.top-3 { border-left: 3px solid rgba(180,100,40,0.7); }
+
+.lb-pos {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.15);
+  position: relative;
+  z-index: 1;
+}
+
+.lb-row.top-1 .lb-pos { color: var(--yellow); text-shadow: 0 0 16px rgba(255,230,0,0.5); }
+.lb-row.top-2 .lb-pos { color: #ccc; }
+.lb-row.top-3 .lb-pos { color: #c07030; }
+
+.lb-pilot {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.pilot-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: rgba(0,170,255,0.5);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: rgba(0,170,255,0.08);
+  padding: 2px 8px;
+  border: 1px solid rgba(0,170,255,0.15);
+}
+
+.lb-pts {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cyan);
+  text-align: right;
+  position: relative;
+  z-index: 1;
+}
+
+.lb-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  text-align: right;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── COMMUNITY ── */
+.community-section {
+  padding: 80px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.comm-visual {
+  position: relative;
+}
+
+.comm-photo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 200px 160px;
+  gap: 4px;
+}
+
+.comm-photo {
+  background: rgba(0,20,40,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  border: 1px solid rgba(0,170,255,0.1);
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.comm-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0,170,255,0.06) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.comm-photo:hover { border-color: rgba(0,255,238,0.3); }
+.comm-photo:hover::before { opacity: 1; }
+
+.comm-photo:first-child {
+  grid-column: span 2;
+  font-size: 64px;
+}
+
+.corner-label {
+  position: absolute;
+  bottom: 8px; right: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  color: rgba(0,170,255,0.4);
+  letter-spacing: 0.1em;
+}
+
+.comm-text .sec-title { margin-bottom: 20px; }
+
+.comm-text p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 32px;
+}
+
+.social-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border: 1px solid rgba(0,170,255,0.15);
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--cyan);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.25s ease;
+}
+
+.social-btn:hover {
+  border-color: rgba(0,255,238,0.3);
+  color: var(--cyan);
+  background: rgba(0,255,238,0.03);
+}
+
+.social-btn:hover::before { transform: scaleY(1); }
+
+.social-count {
+  margin-left: auto;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: rgba(0,170,255,0.5);
+}
+
+/* ── STEPS ── */
+.steps-section {
+  border-top: 1px solid rgba(0,170,255,0.1);
+  background: linear-gradient(180deg, rgba(0,30,60,0.4), rgba(0,10,30,0.2));
+  padding: 80px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.steps-section::before {
+  content: 'START';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 200px;
+  color: rgba(0,170,255,0.03);
+  letter-spacing: -0.02em;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.steps-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: rgba(0,170,255,0.05);
+}
+
+.step-card {
+  background: rgba(2,4,8,0.95);
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0,170,255,0.07);
+  transition: border-color 0.2s;
+}
+
+.step-card:hover { border-color: rgba(0,255,238,0.2); }
+
+.step-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--blue), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.step-card:hover::after { transform: scaleX(1); }
+
+.step-n {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 60px;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(0,170,255,0.08);
+}
+
+.step-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.06em;
+  color: var(--white);
+}
+
+.step-desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.4);
+}
+
+.step-link {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  transition: gap 0.2s;
+}
+
+.step-link:hover { gap: 16px; }
+.step-link::after { content: '→'; }
+
+/* ── TEAM ── */
+.team-section {
+  padding: 80px 48px;
+  border-top: 1px solid rgba(0,170,255,0.08);
+}
+
+.team-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: rgba(0,170,255,0.05);
+}
+
+.team-card {
+  background: rgba(2,4,8,0.95);
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  border: 1px solid rgba(0,170,255,0.07);
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.team-card:hover {
+  background: rgba(0,15,30,0.98);
+  border-color: rgba(0,255,238,0.2);
+}
+
+.team-card::before {
+  content: attr(data-role);
+  position: absolute;
+  bottom: -30px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: rgba(0,170,255,0.03);
+  letter-spacing: -0.02em;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: bottom 0.3s;
+}
+
+.team-card:hover::before { bottom: -10px; }
+
+.team-ava {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: rgba(0,30,60,0.8);
+  border: 2px solid rgba(0,170,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.team-card:hover .team-ava {
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px rgba(0,255,238,0.25);
+}
+
+.team-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  color: var(--white);
+  position: relative;
+  z-index: 1;
+}
+
+.team-role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── CONTEST ── */
+.contest-section {
+  background: var(--bg);
+  border: none;
+  border-top: 1px solid rgba(0,170,255,0.1);
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.contest-inner {
+  padding: 80px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: stretch;
+  position: relative;
+  z-index: 2;
+}
+
+.contest-left {
+  padding-right: 60px;
+  border-right: 1px solid rgba(0,170,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: center;
+}
+
+.contest-left .sec-title .accent {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--cyan);
+  filter: drop-shadow(0 0 12px rgba(0,255,238,0.4));
+}
+
+.contest-desc {
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.4);
+  max-width: 480px;
+}
+
+.contest-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 60px;
+  position: relative;
+}
+
+.contest-drone {
+  font-size: 120px;
+  filter:
+    drop-shadow(0 0 40px rgba(0,170,255,0.6))
+    drop-shadow(0 0 80px rgba(0,170,255,0.2));
+  animation: drone-hover 4s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes drone-hover {
+  0%,100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-20px) rotate(3deg); }
+}
+
+/* big bg number */
+.contest-bg-num {
+  position: absolute;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 300px;
+  color: rgba(0,170,255,0.03);
+  line-height: 1;
+  user-select: none;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: rgba(0,5,10,0.98);
+  border-top: 1px solid rgba(0,170,255,0.15);
+}
+
+.footer-inner {
+  padding: 64px 48px 32px;
+  max-width: none;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(0,170,255,0.08);
+  margin-bottom: 32px;
+}
+
+.footer-brand-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  margin-bottom: 16px;
+}
+
+.footer-brand-name span {
+  color: var(--cyan);
+  text-shadow: 0 0 20px rgba(0,255,238,0.4);
+}
+
+.footer-brand p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.3);
+  max-width: 320px;
+}
+
+.footer-col h4 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(0,170,255,0.6);
+  margin-bottom: 20px;
+}
+
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+.footer-col ul a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+}
+
+.footer-col ul a::before { content: '›'; color: rgba(0,170,255,0.4); }
+.footer-col ul a:hover { color: var(--white); }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 0.1em;
+}
+
+.footer-social {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-social a {
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0,170,255,0.15);
+  color: rgba(255,255,255,0.3);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+}
+
+.footer-social a:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 16px rgba(0,255,238,0.2);
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 6px;
+  z-index: 300;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--cyan);
+  transition: all .25s;
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* mobile nav drawer */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 60px; left: 0; right: 0;
+  background: rgba(2,4,8,.97);
+  border-bottom: 1px solid rgba(0,170,255,.2);
+  backdrop-filter: blur(20px);
+  z-index: 200;
+  padding: 16px 20px 24px;
+  flex-direction: column;
+  gap: 2px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(0,170,255,.08);
+  cursor: pointer;
+  transition: color .2s, background .2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mobile-nav a:hover, .mobile-nav a.active {
+  color: var(--cyan);
+  background: rgba(0,255,238,.04);
+}
+.mobile-nav a::before { content: '//'; color: var(--pink); font-size: 9px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-right {
+    flex-direction: row;
+    align-self: auto;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  .hero-right .stat-item {
+    flex: 1 1 calc(50% - 2px);
+    min-width: 0;
+  }
+  .races-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .community-section { grid-template-columns: 1fr; }
+  .contest-inner { grid-template-columns: 1fr; }
+  .contest-right { display: none; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .nav-reg { display: none; }
+  .section-block, .scoreboard-section, .steps-section, .team-section, .community-section, .footer-inner { padding: 60px 24px; }
+}
+
+@media (max-width: 600px) {
+  .hero-right .stat-item { flex: 1 1 calc(50% - 2px); padding: 14px 16px; }
+  .stat-num { font-size: 24px; }
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
+  .cta-main, .cta-sec { width: 100%; text-align: center; justify-content: center; }
+  .hero-inner { padding: 0 20px 48px; }
+}
+/* ══ PAGE SYSTEM ══ */
+.page { display: none; }
+.page.active { display: block; }
+
+/* Nav active state */
+.nav-links a.active { color: var(--cyan); text-shadow: 0 0 12px var(--cyan); }
+.nav-links a { cursor: pointer; }
+
+/* ══ SUBPAGE SHARED ══ */
+.page-hero {
+  position: relative; overflow: hidden;
+  padding: 100px 48px 60px;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(0,170,255,0.15);
+}
+.page-hero-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(0,170,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,170,255,.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.page-hero-glow {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  filter: blur(100px); right: -100px; top: -200px;
+  background: rgba(0,170,255,.1); pointer-events: none;
+}
+.page-hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; }
+.page-eyebrow {
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  color: var(--cyan); letter-spacing: .3em; text-transform: uppercase; margin-bottom: 12px;
+}
+.page-eyebrow::before { content: '// '; color: var(--pink); }
+.page-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(56px, 8vw, 100px); line-height: 1.0; letter-spacing: .02em; color: var(--white);
+}
+.page-title em {
+  color: transparent; -webkit-text-stroke: 2px var(--cyan); font-style: normal;
+  filter: drop-shadow(0 0 16px rgba(0,255,238,.4));
+}
+.page-desc { margin-top: 20px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.4); max-width: 560px; }
+
+.content { max-width: 1200px; margin: 0 auto; padding: 60px 48px; }
+
+.sec-label {
+  font-family: 'Share Tech Mono', monospace; font-size: 10px;
+  color: var(--cyan); letter-spacing: .3em; text-transform: uppercase; margin-bottom: 16px;
+}
+.sec-label::before { content: '// '; }
+.divider { height: 1px; background: linear-gradient(90deg, var(--cyan), rgba(0,170,255,.2), transparent); margin: 48px 0; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 900;
+  letter-spacing: .18em; text-transform: uppercase; padding: 14px 28px;
+  text-decoration: none; cursor: pointer; border: none;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: all .15s;
+}
+.btn-cyan { background: var(--cyan); color: var(--bg); }
+.btn-cyan:hover { background: var(--white); box-shadow: 0 0 40px rgba(0,255,238,.6); }
+.btn-ghost {
+  background: transparent; color: var(--cyan);
+  border: 1px solid rgba(0,255,238,.3); clip-path: none;
+  padding: 13px 27px;
+}
+.btn-ghost:hover { background: rgba(0,255,238,.06); border-color: var(--cyan); }
+.btn-sm { padding: 9px 16px; font-size: 9px; }
+
+/* ══ ZÁVODY ══ */
+.season-overview {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 2px; background: rgba(0,170,255,.05); margin-bottom: 48px;
+}
+.overview-stat {
+  background: var(--bg); padding: 32px; border: 1px solid rgba(0,170,255,.12);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.overview-num {
+  font-family: 'Orbitron', sans-serif; font-size: 36px; font-weight: 900;
+  color: var(--cyan); text-shadow: 0 0 20px rgba(0,255,238,.4); line-height: 1;
+}
+.overview-lbl {
+  font-family: 'Share Tech Mono', monospace; font-size: 9px;
+  color: rgba(255,255,255,.4); letter-spacing: .2em; text-transform: uppercase;
+}
+.calendar-filters { display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap; }
+.filter-btn {
+  font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase; padding: 8px 18px;
+  border: 1px solid rgba(0,170,255,.12); background: transparent;
+  color: rgba(255,255,255,.4); cursor: pointer; transition: all .2s;
+}
+.filter-btn:hover, .filter-btn.active { border-color: var(--cyan); color: var(--cyan); background: rgba(0,255,238,.04); }
+.race-list { display: flex; flex-direction: column; gap: 2px; background: rgba(0,170,255,.04); }
+.race-item {
+  background: var(--bg); border: 1px solid rgba(0,170,255,.12);
+  display: grid; grid-template-columns: 80px 1fr auto auto;
+  align-items: center; gap: 24px; padding: 28px 32px;
+  transition: background .2s; position: relative; overflow: hidden;
+}
+.race-item::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: linear-gradient(180deg, var(--cyan), var(--blue));
+  transform: scaleY(0); transform-origin: top; transition: transform .3s;
+}
+.race-item:hover { background: rgba(0,20,40,.8); }
+.race-item:hover::before { transform: scaleY(1); }
+.race-item.past { opacity: .4; }
+.race-item.next { border-color: rgba(0,255,238,.25); background: rgba(0,255,238,.03); }
+.race-item.next::before { transform: scaleY(1); }
+.race-date-block {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  border-right: 1px solid rgba(0,170,255,.12); padding-right: 24px;
+}
+.race-day { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900; color: var(--cyan); line-height: 1; text-shadow: 0 0 16px rgba(0,255,238,.4); }
+.race-month { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: .2em; text-transform: uppercase; margin-top: 2px; }
+.race-year { font-family: 'Share Tech Mono', monospace; font-size: 8px; color: rgba(0,170,255,.4); letter-spacing: .15em; }
+.race-num-tag { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(0,170,255,.5); letter-spacing: .2em; margin-bottom: 6px; }
+.race-num-tag::before { content: '// '; }
+.race-name-big { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: .04em; color: var(--white); line-height: 1; }
+.race-meta-row { display: flex; gap: 20px; margin-top: 8px; flex-wrap: wrap; }
+.race-meta-item { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(255,255,255,.4); letter-spacing: .08em; display: flex; align-items: center; gap: 6px; }
+.race-status { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.status-badge {
+  font-family: 'Orbitron', sans-serif; font-size: 8px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase; padding: 4px 12px; border: 1px solid;
+}
+.status-open { color: var(--cyan); border-color: rgba(0,255,238,.3); background: rgba(0,255,238,.06); }
+.status-soon { color: var(--yellow); border-color: rgba(255,230,0,.3); background: rgba(255,230,0,.05); }
+.status-past { color: rgba(255,255,255,.4); border-color: rgba(255,255,255,.1); }
+.race-pilots { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(0,170,255,.5); letter-spacing: .1em; text-align: right; }
+
+/* ══ VÝSLEDKY ══ */
+.results-tabs { display: flex; border-bottom: 1px solid rgba(0,170,255,.12); }
+.rtab {
+  font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 700;
+  letter-spacing: .15em; text-transform: uppercase; padding: 12px 24px;
+  color: rgba(255,255,255,.3); cursor: pointer; border-bottom: 2px solid transparent;
+  background: transparent; border-top: none; border-left: none; border-right: none; transition: all .2s;
+}
+.rtab:hover { color: rgba(255,255,255,.7); }
+.rtab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+.results-panel { display: none; padding-top: 32px; }
+.results-panel.active { display: block; }
+.standings-table { width: 100%; border-collapse: collapse; }
+.standings-table th {
+  font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: .25em;
+  text-transform: uppercase; color: rgba(0,170,255,.5); padding: 10px 16px;
+  text-align: left; background: rgba(0,170,255,.06); border-bottom: 1px solid rgba(0,170,255,.12);
+}
+.standings-table td { padding: 16px; border-bottom: 1px solid rgba(0,170,255,.05); font-size: 14px; vertical-align: middle; }
+.standings-table tr:hover td { background: rgba(0,20,40,.6); }
+.pos-num { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: rgba(255,255,255,.15); width: 48px; }
+.pos-gold { color: var(--yellow); text-shadow: 0 0 12px rgba(255,230,0,.4); }
+.pos-silver { color: #ccc; }
+.pos-bronze { color: #c07030; }
+.pilot-cell { display: flex; align-items: center; gap: 12px; }
+.pilot-ava {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(0,30,60,.8); border: 1.5px solid rgba(0,170,255,.2);
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+}
+.pilot-ava.gold-av { border-color: var(--yellow); box-shadow: 0 0 12px rgba(255,230,0,.3); }
+.pilot-name-big { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .05em; color: var(--white); }
+.pilot-city { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(0,170,255,.4); letter-spacing: .1em; }
+.pts-cell { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700; color: var(--cyan); }
+.time-cell { font-family: 'Share Tech Mono', monospace; font-size: 12px; color: rgba(255,255,255,.4); }
+.trend-up { color: #00ff88; font-size: 11px; }
+.trend-dn { color: var(--pink); font-size: 11px; }
+.result-card { background: rgba(6,12,20,1); border: 1px solid rgba(0,170,255,.12); padding: 32px; margin-bottom: 16px; position: relative; overflow: hidden; }
+.result-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--cyan), var(--blue), transparent); }
+.result-race-tag { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(0,170,255,.5); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 8px; }
+.result-race-tag::before { content: '// '; }
+.result-race-name { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: .04em; color: var(--white); margin-bottom: 16px; }
+.result-podium { display: flex; gap: 2px; background: rgba(0,170,255,.05); }
+.result-p-item { flex: 1; padding: 16px; background: var(--bg); border: 1px solid rgba(0,170,255,.12); text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.result-p-item.p1 { border-top: 2px solid var(--yellow); }
+.result-p-item.p2 { border-top: 2px solid rgba(200,200,200,.5); }
+.result-p-item.p3 { border-top: 2px solid rgba(180,100,40,.6); }
+.result-p-pos { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: .15em; text-transform: uppercase; }
+.p1 .result-p-pos { color: var(--yellow); }
+.p2 .result-p-pos { color: #ccc; }
+.p3 .result-p-pos { color: #c07030; }
+.result-p-name { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: .05em; color: var(--white); }
+.result-p-time { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(255,255,255,.4); }
+
+/* ══ JAK ZAČÍT ══ */
+.start-steps { display: flex; flex-direction: column; gap: 2px; background: rgba(0,170,255,.04); }
+.start-step {
+  background: var(--bg); border: 1px solid rgba(0,170,255,.12); padding: 48px;
+  display: grid; grid-template-columns: 80px 1fr auto; gap: 40px; align-items: start;
+  transition: background .2s; position: relative; overflow: hidden;
+}
+.start-step:hover { background: rgba(0,15,30,.98); }
+.start-step::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  transform: scaleX(0); transform-origin: left; transition: transform .4s;
+}
+.start-step:hover::after { transform: scaleX(1); }
+.step-big-n { font-family: 'Orbitron', sans-serif; font-size: 64px; font-weight: 900; color: rgba(0,170,255,.08); line-height: 1; }
+.step-title-big { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: .04em; color: var(--white); margin-bottom: 12px; }
+.step-body { font-size: 15px; line-height: 1.75; color: rgba(255,255,255,.4); margin-bottom: 20px; max-width: 600px; }
+.step-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.step-tag { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(0,170,255,.6); border: 1px solid rgba(0,170,255,.2); padding: 4px 12px; letter-spacing: .1em; }
+.step-visual { font-size: 64px; filter: drop-shadow(0 0 24px rgba(0,170,255,.4)); }
+.gear-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(0,170,255,.04); margin-top: 48px; }
+.gear-card { background: var(--bg); border: 1px solid rgba(0,170,255,.12); padding: 32px; transition: border-color .2s; }
+.gear-card:hover { border-color: rgba(0,255,238,.2); }
+.gear-icon { font-size: 36px; margin-bottom: 16px; filter: drop-shadow(0 0 16px rgba(0,170,255,.4)); }
+.gear-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .04em; color: var(--white); margin-bottom: 8px; }
+.gear-spec { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(0,170,255,.5); letter-spacing: .08em; line-height: 1.8; margin-bottom: 12px; }
+.gear-price { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700; color: var(--cyan); }
+.rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: rgba(0,170,255,.04); margin-top: 48px; }
+.rule-card { background: var(--bg); border: 1px solid rgba(0,170,255,.12); padding: 32px; position: relative; overflow: hidden; }
+.rule-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--cyan), transparent); }
+.rule-n { font-family: 'Orbitron', sans-serif; font-size: 48px; font-weight: 900; color: rgba(0,170,255,.06); position: absolute; right: 16px; top: 16px; line-height: 1; }
+.rule-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .04em; color: var(--white); margin-bottom: 10px; }
+.rule-body { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,.4); }
+
+/* ══ TÝM ══ */
+.team-hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-bottom: 60px; }
+.team-big-num { font-family: 'Orbitron', sans-serif; font-size: 80px; font-weight: 900; color: var(--cyan); text-shadow: 0 0 30px rgba(0,255,238,.4); line-height: 1; }
+.team-big-lbl { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: rgba(255,255,255,.4); letter-spacing: .25em; text-transform: uppercase; }
+.full-team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: rgba(0,170,255,.05); }
+.team-card-full {
+  background: var(--bg); border: 1px solid rgba(0,170,255,.12); padding: 32px 24px;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;
+  transition: background .2s, border-color .2s; position: relative; overflow: hidden;
+}
+.team-card-full:hover { background: rgba(0,15,30,.98); border-color: rgba(0,255,238,.2); }
+.team-card-full::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  transform: scaleX(0); transform-origin: left; transition: transform .3s;
+}
+.team-card-full:hover::after { transform: scaleX(1); }
+.team-ava-lg {
+  width: 80px; height: 80px; border-radius: 50%; background: rgba(0,30,60,.8);
+  border: 2px solid rgba(0,170,255,.2); display: flex; align-items: center;
+  justify-content: center; font-size: 32px; transition: border-color .2s, box-shadow .2s;
+}
+.team-card-full:hover .team-ava-lg { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0,255,238,.25); }
+.team-name-lg { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .06em; color: var(--white); }
+.team-role-lg { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--cyan); letter-spacing: .18em; text-transform: uppercase; }
+.team-bio { font-size: 12px; line-height: 1.6; color: rgba(255,255,255,.3); margin-top: 4px; }
+.team-social-links { display: flex; gap: 6px; margin-top: 4px; }
+.team-soc { width: 28px; height: 28px; border: 1px solid rgba(0,170,255,.12); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.4); font-size: 11px; text-decoration: none; transition: all .2s; }
+.team-soc:hover { border-color: var(--cyan); color: var(--cyan); }
+.join-card {
+  background: linear-gradient(135deg, rgba(0,170,255,.06), rgba(0,255,238,.03));
+  border: 1px dashed rgba(0,170,255,.25); grid-column: span 2; padding: 48px;
+  display: flex; align-items: center; justify-content: space-between; gap: 40px;
+}
+.join-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: .04em; color: var(--white); margin-bottom: 8px; }
+.join-card p { font-size: 14px; color: rgba(255,255,255,.4); line-height: 1.6; max-width: 480px; }
+
+/* ══ STORE ══ */
+.store-hero-wrap {
+  position: relative; padding: 100px 48px 56px; overflow: hidden; border-bottom: 1px solid rgba(0,170,255,.15);
+}
+.store-hero-bg {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(0,170,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,170,255,.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.store-hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(120px); right: -150px; top: -200px; background: rgba(0,170,255,.09); pointer-events: none; }
+.store-hero-word { position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: clamp(180px,20vw,300px); color: transparent; -webkit-text-stroke: 1px rgba(0,170,255,.04); right: -20px; top: -20px; line-height: .85; user-select: none; z-index: 0; }
+.store-hero-inner { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; }
+.free-ship { display: inline-flex; align-items: center; gap: 10px; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #00ff88; letter-spacing: .15em; text-transform: uppercase; border: 1px solid rgba(0,255,136,.2); padding: 8px 20px; background: rgba(0,255,136,.04); margin-top: 20px; }
+.free-ship::before { content: '✓'; font-weight: 900; }
+.store-main { max-width: 1200px; margin: 0 auto; padding: 48px 40px 80px; display: grid; grid-template-columns: 220px 1fr; gap: 36px; }
+.store-sidebar {}
+.sb-title { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(0,170,255,.4); letter-spacing: .3em; text-transform: uppercase; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,170,255,.08); }
+.sb-cats { display: flex; flex-direction: column; gap: 1px; margin-bottom: 28px; }
+.sb-cat {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.3); padding: 9px 12px;
+  cursor: pointer; border: 1px solid transparent; background: transparent; transition: all .2s; text-align: left; width: 100%;
+}
+.sb-cat:hover { color: var(--cyan); background: rgba(0,255,238,.03); border-color: rgba(0,255,238,.1); }
+.sb-cat.active { color: var(--cyan); background: rgba(0,255,238,.05); border-color: rgba(0,255,238,.2); border-left: 2px solid var(--cyan); }
+.sb-cnt { font-family: 'Share Tech Mono', monospace; font-size: 8px; color: rgba(0,170,255,.35); }
+.price-range { width: 100%; accent-color: var(--cyan); cursor: pointer; margin: 8px 0; }
+.price-lbl { display: flex; justify-content: space-between; font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,.3); }
+.store-products {}
+.store-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.store-toolbar-info { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(0,170,255,.45); letter-spacing: .08em; }
+.store-toolbar-info span { color: var(--cyan); }
+.store-sort { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); background: rgba(0,170,255,.06); border: 1px solid rgba(0,170,255,.12); padding: 7px 12px; cursor: pointer; appearance: none; }
+.store-sort option { background: #0a1020; }
+.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(0,170,255,.04); }
+.product-card { background: var(--bg); border: 1px solid rgba(0,170,255,.12); display: flex; flex-direction: column; position: relative; overflow: hidden; transition: border-color .2s; }
+.product-card:hover { border-color: rgba(0,255,238,.2); }
+.product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--cyan), var(--blue), transparent); transform: scaleX(0); transform-origin: left; transition: transform .35s; z-index: 2; }
+.product-card:hover::before { transform: scaleX(1); }
+.product-card.hidden { display: none; }
+.p-img { height: 210px; background: linear-gradient(135deg,#040e1e,#020810); display: flex; align-items: center; justify-content: center; font-size: 72px; position: relative; overflow: hidden; border-bottom: 1px solid rgba(0,170,255,.12); }
+.p-img::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(0,170,255,.08) 0%, transparent 70%); pointer-events: none; }
+.p-badge { position: absolute; top: 10px; left: 10px; z-index: 3; font-family: 'Orbitron', sans-serif; font-size: 8px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: 3px 9px; }
+.p-badge-new { background: var(--cyan); color: var(--bg); }
+.p-badge-hot { background: var(--pink); color: var(--white); }
+.p-badge-sale { background: var(--yellow); color: var(--bg); }
+.p-body { padding: 20px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.p-cat { font-family: 'Share Tech Mono', monospace; font-size: 8px; color: rgba(0,170,255,.45); letter-spacing: .2em; text-transform: uppercase; }
+.p-cat::before { content: '// '; }
+.p-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .04em; color: var(--white); line-height: 1.1; }
+.p-desc { font-size: 12px; line-height: 1.55; color: rgba(255,255,255,.32); }
+.p-sizes { display: flex; gap: 3px; flex-wrap: wrap; }
+.p-sz { font-family: 'Share Tech Mono', monospace; font-size: 8px; color: rgba(255,255,255,.4); border: 1px solid rgba(0,170,255,.15); padding: 4px 8px; cursor: pointer; transition: all .15s; background: transparent; user-select: none; }
+.p-sz:hover { border-color: rgba(0,255,238,.3); color: rgba(0,255,238,.8); }
+.p-sz.sel { border-color: var(--cyan); color: var(--cyan); background: rgba(0,255,238,.07); }
+.p-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(0,170,255,.06); }
+.p-price { font-family: 'Orbitron', sans-serif; font-size: 17px; font-weight: 900; color: var(--cyan); text-shadow: 0 0 10px rgba(0,255,238,.3); }
+.p-price-old { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(255,255,255,.22); text-decoration: line-through; display: block; margin-top: 1px; }
+.add-btn { font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; color: var(--bg); background: var(--cyan); padding: 11px 18px; cursor: pointer; border: none; clip-path: polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px); transition: all .15s; }
+.add-btn:hover { background: var(--white); box-shadow: 0 0 28px rgba(0,255,238,.5); }
+.add-btn:active { transform: scale(.97); }
+.add-btn.added { background: #00ff88; }
+
+/* cart */
+.cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 600; opacity: 0; pointer-events: none; transition: opacity .3s; backdrop-filter: blur(4px); }
+.cart-overlay.open { opacity: 1; pointer-events: all; }
+.cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 420px; max-width: 100vw; background: rgba(4,8,16,.97); border-left: 1px solid rgba(0,170,255,.2); z-index: 700; display: flex; flex-direction: column; transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1); }
+.cart-overlay.open .cart-drawer { transform: translateX(0); }
+.cart-head { padding: 20px 24px; border-bottom: 1px solid rgba(0,170,255,.12); display: flex; align-items: center; justify-content: space-between; }
+.cart-head-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: .06em; }
+.cart-head-title em { color: var(--cyan); font-style: normal; }
+.cart-close { font-size: 18px; color: rgba(255,255,255,.4); cursor: pointer; background: transparent; border: none; transition: color .2s; font-family: 'Share Tech Mono', monospace; }
+.cart-close:hover { color: var(--white); }
+.cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 8px; }
+.cart-items::-webkit-scrollbar { width: 4px; }
+.cart-items::-webkit-scrollbar-thumb { background: rgba(0,170,255,.3); border-radius: 2px; }
+.cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; height: 100%; opacity: .4; }
+.cart-empty-icon { font-size: 56px; }
+.cart-empty-txt { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: .06em; }
+.cart-item { display: flex; gap: 14px; padding: 14px; background: rgba(0,170,255,.04); border: 1px solid rgba(0,170,255,.08); align-items: center; position: relative; }
+.cart-item-img { width: 56px; height: 56px; background: rgba(0,20,40,.8); display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; border: 1px solid rgba(0,170,255,.12); }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: .04em; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cart-item-sz { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(0,170,255,.5); letter-spacing: .15em; text-transform: uppercase; margin-top: 2px; }
+.cart-item-price { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700; color: var(--cyan); margin-top: 4px; }
+.cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+.qty-btn { width: 24px; height: 24px; border: 1px solid rgba(0,170,255,.12); background: transparent; color: var(--white); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.qty-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.qty-num { font-family: 'Share Tech Mono', monospace; font-size: 12px; min-width: 20px; text-align: center; }
+.cart-item-rm { position: absolute; top: 8px; right: 8px; background: transparent; border: none; color: rgba(255,255,255,.2); cursor: pointer; font-size: 14px; transition: color .15s; padding: 2px; }
+.cart-item-rm:hover { color: var(--pink); }
+.cart-foot { padding: 20px 24px; border-top: 1px solid rgba(0,170,255,.12); display: flex; flex-direction: column; gap: 12px; }
+.cart-subtotal { display: flex; justify-content: space-between; align-items: center; }
+.cart-subtotal-lbl { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(255,255,255,.4); letter-spacing: .15em; text-transform: uppercase; }
+.cart-subtotal-val { font-family: 'Orbitron', sans-serif; font-size: 22px; font-weight: 900; color: var(--cyan); }
+.cart-note { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: rgba(0,255,136,.5); letter-spacing: .1em; text-align: center; }
+.checkout-btn { width: 100%; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; color: var(--bg); background: var(--cyan); padding: 18px; cursor: pointer; border: none; clip-path: polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px); transition: all .2s; }
+.checkout-btn:hover { background: var(--white); box-shadow: 0 0 50px rgba(0,255,238,.6); }
+.cart-toggle-btn { display: flex; align-items: center; gap: 8px; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--white); background: transparent; border: 1px solid rgba(0,170,255,.2); padding: 8px 18px; cursor: pointer; clip-path: polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px); transition: all .2s; position: relative; }
+.cart-toggle-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.cart-badge { background: var(--pink); color: var(--white); border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 900; position: absolute; top: -6px; right: -6px; font-family: 'Orbitron', sans-serif; transition: transform .2s; }
+.cart-badge.bump { transform: scale(1.4); }
+.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); background: rgba(0,255,136,.12); border: 1px solid rgba(0,255,136,.3); color: #00ff88; font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: 12px 28px; z-index: 1000; opacity: 0; transition: all .3s; pointer-events: none; clip-path: polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); white-space: nowrap; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ══ RESPONSIVE additions ══ */
+@media(max-width:900px){
+  .store-main{grid-template-columns:1fr}.store-sidebar{display:none}
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+  .full-team-grid{grid-template-columns:repeat(2,1fr)}
+  .gear-grid{grid-template-columns:1fr}
+  .rules-grid{grid-template-columns:1fr}
+  .season-overview{grid-template-columns:repeat(2,1fr)}
+  .team-hero-grid{grid-template-columns:1fr}
+  .start-step{grid-template-columns:60px 1fr}.step-visual{display:none}
+  .join-card{flex-direction:column}
+  .race-item{grid-template-columns:60px 1fr;gap:16px}.race-status{display:none}
+  .content{padding:40px 20px}.page-hero{padding:80px 20px 40px}
+  .store-hero-wrap{padding:90px 20px 40px}
+}
+@media(max-width:600px){.product-grid{grid-template-columns:1fr}.store-main{padding:32px 16px}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('home');return false;">
+    <svg width="34" height="34" viewBox="0 0 40 40" fill="none">
+      <circle cx="8"  cy="8"  r="5" stroke="#00AAFF" stroke-width="1.5"/>
+      <circle cx="32" cy="8"  r="5" stroke="#00AAFF" stroke-width="1.5"/>
+      <circle cx="8"  cy="32" r="5" stroke="#00AAFF" stroke-width="1.5"/>
+      <circle cx="32" cy="32" r="5" stroke="#00AAFF" stroke-width="1.5"/>
+      <circle cx="20" cy="20" r="5" fill="#00AAFF"/>
+      <circle cx="20" cy="20" r="3" fill="#00FFEE"/>
+      <line x1="12" y1="8"  x2="27" y2="8"  stroke="#00AAFF" stroke-width="1.5"/>
+      <line x1="12" y1="32" x2="27" y2="32" stroke="#00AAFF" stroke-width="1.5"/>
+      <line x1="8"  y1="12" x2="8"  y2="27" stroke="#00AAFF" stroke-width="1.5"/>
+      <line x1="32" y1="12" x2="32" y2="27" stroke="#00AAFF" stroke-width="1.5"/>
+      <line x1="12" y1="12" x2="17" y2="17" stroke="#00AAFF" stroke-width="1" opacity="0.4"/>
+      <line x1="28" y1="12" x2="23" y2="17" stroke="#00AAFF" stroke-width="1" opacity="0.4"/>
+      <line x1="12" y1="28" x2="17" y2="23" stroke="#00AAFF" stroke-width="1" opacity="0.4"/>
+      <line x1="28" y1="28" x2="23" y2="23" stroke="#00AAFF" stroke-width="1" opacity="0.4"/>
+    </svg>
+    <div>
+      <div class="nav-cwl">C<span>W</span>L</div>
+      <div class="nav-sub">Czech Whoop League</div>
+    </div>
+  </a>
+
+  <ul class="nav-links">
+    <li><a id="nav-zavody"   onclick="showPage('zavody')">Závody</a></li>
+    <li><a id="nav-vysledky" onclick="showPage('vysledky')">Výsledky</a></li>
+    <li><a id="nav-start"   onclick="showPage('start')">Jak začít</a></li>
+    <li><a id="nav-tym"     onclick="showPage('tym')">Tým</a></li>
+    <li><a id="nav-pravidla" onclick="showPage('pravidla')">Pravidla</a></li>
+    <li><a id="nav-store"   onclick="showPage('store')" style="color:rgba(0,255,238,.5)">Store 🛍</a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="cart-toggle-btn" onclick="openCart()">
+      🛒 Košík
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+    <a onclick="showPage('start');return false;" class="nav-reg">Přihlásit →</a>
+    <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a id="mnav-zavody"   onclick="showPage('zavody');closeMobileNav()">Závody</a>
+  <a id="mnav-vysledky" onclick="showPage('vysledky');closeMobileNav()">Výsledky</a>
+  <a id="mnav-start"    onclick="showPage('start');closeMobileNav()">Jak začít</a>
+  <a id="mnav-tym"      onclick="showPage('tym');closeMobileNav()">Tým</a>
+  <a id="mnav-pravidla" onclick="showPage('pravidla');closeMobileNav()">Pravidla</a>
+  <a id="mnav-store"    onclick="showPage('store');closeMobileNav()" style="color:rgba(0,255,238,.5)">Store 🛍</a>
+  <a onclick="showPage('start');closeMobileNav()" style="color:var(--cyan);background:rgba(0,255,238,.06);margin-top:8px;border:1px solid rgba(0,255,238,.2)">Přihlásit se →</a>
+</div>
+<div class="page active" id="page-home">
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-bg-text">WHOOP</div>
+
+  <div class="hero-inner">
+    <div class="hero-left">
+      <p class="hero-tag">Sezóna 2026 · Praha · Czech Republic</p>
+      <h1 class="hero-h1">
+        <span class="line-1">Malé</span>
+        <span class="line-2">Drony.</span>
+        <span class="line-3">Velké zážitky.</span>
+      </h1>
+      <div class="hero-ctas">
+        <a href="#trening" class="cta-main">Jak začít</a>
+        <a href="#zavody" class="cta-sec">Kalendář závodů</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="stat-item">
+        <span class="stat-num">2026</span>
+        <span class="stat-lbl">Season</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">6×</span>
+        <span class="stat-lbl">Race events</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">40+</span>
+        <span class="stat-lbl">Active pilots</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">1S</span>
+        <span class="stat-lbl">Whoop class</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-strip">
+    <div class="ticker-wrap">
+      <div class="ticker-track">
+        <span class="ticker-item">Czech Whoop League <span>2026</span></span>
+        <span class="ticker-item">FPV Indoor Racing</span>
+        <span class="ticker-item">Malé Drony <span>Velké Zážitky</span></span>
+        <span class="ticker-item">Praha · Hostivice</span>
+        <span class="ticker-item">1S Whoop Class</span>
+        <span class="ticker-item">Czech Whoop League <span>2026</span></span>
+        <span class="ticker-item">FPV Indoor Racing</span>
+        <span class="ticker-item">Malé Drony <span>Velké Zážitky</span></span>
+        <span class="ticker-item">Praha · Hostivice</span>
+        <span class="ticker-item">1S Whoop Class</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RACES ── -->
+<div class="section-block" id="zavody">
+  <div class="sec-head">
+    <div>
+      <p class="sec-eyebrow">Kalendář sezóny 2026</p>
+      <h2 class="sec-title">Nadcházející<br>závody</h2>
+    </div>
+    <a href="#" class="link-all">Zobrazit vše →</a>
+  </div>
+
+  <div class="races-grid">
+    <div class="race-card reveal" style="opacity:.5">
+      <div class="race-card-img">
+        🏁
+        <span class="badge-live" style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.5)">ODEHRÁNO</span>
+      </div>
+      <div class="race-card-body">
+        <span class="race-num">// RACE_02 · LIGOVÝ ZÁVOD</span>
+        <h3 class="race-name">2. Ligový<br>Závod</h3>
+        <div class="race-info">
+          <strong>28. února 2026</strong><br>
+          📍 Hostivice, Praha-západ<br>
+          CLASS: 1S Whoop · Indoor
+        </div>
+        <a onclick="showPage('vysledky');return false;" href="#" class="race-cta" style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.6)">Výsledky →</a>
+      </div>
+    </div>
+
+    <div class="race-card reveal">
+      <div class="race-card-img" style="background: linear-gradient(135deg, #080418, #020810);">
+        🚀
+        <span class="badge-live">BRZY</span>
+      </div>
+      <div class="race-card-body">
+        <span class="race-num">// RACE_03 · LIGOVÝ ZÁVOD</span>
+        <h3 class="race-name">3. Ligový<br>Závod</h3>
+        <div class="race-info">
+          <strong>28. března 2026</strong><br>
+          📍 Hostivice, Praha-západ<br>
+          CLASS: 1S Whoop · Indoor
+        </div>
+        <a href="#" class="race-cta">Přihlásit se →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCOREBOARD ── -->
+<div class="scoreboard-section" id="liga">
+  <div class="sec-head">
+    <div>
+      <p class="sec-eyebrow">Standings · Sezóna 2026</p>
+      <h2 class="sec-title">Ligová<br>tabulka</h2>
+    </div>
+    <a href="#" class="link-all">Plné výsledky →</a>
+  </div>
+
+  <div class="leaderboard">
+    <div class="lb-header">
+      <span>#</span>
+      <span>Pilot</span>
+      <span style="text-align:right">Pts</span>
+      <span style="text-align:right">Best lap</span>
+    </div>
+    <div class="lb-row top-1 reveal">
+      <span class="lb-pos">01</span>
+      <div class="lb-pilot">SPEEDY_CZ <span class="pilot-tag">Praha</span></div>
+      <span class="lb-pts">340</span>
+      <span class="lb-time">04.231s</span>
+    </div>
+    <div class="lb-row top-2 reveal">
+      <span class="lb-pos">02</span>
+      <div class="lb-pilot">WHOOPMASTER <span class="pilot-tag">Brno</span></div>
+      <span class="lb-pts">295</span>
+      <span class="lb-time">04.388s</span>
+    </div>
+    <div class="lb-row top-3 reveal">
+      <span class="lb-pos">03</span>
+      <div class="lb-pilot">FASTIK99 <span class="pilot-tag">Ostrava</span></div>
+      <span class="lb-pts">280</span>
+      <span class="lb-time">04.512s</span>
+    </div>
+    <div class="lb-row reveal">
+      <span class="lb-pos">04</span>
+      <div class="lb-pilot">DRONEKING <span class="pilot-tag">Plzeň</span></div>
+      <span class="lb-pts">245</span>
+      <span class="lb-time">04.670s</span>
+    </div>
+    <div class="lb-row reveal">
+      <span class="lb-pos">05</span>
+      <div class="lb-pilot">MICRO_FPV <span class="pilot-tag">Praha</span></div>
+      <span class="lb-pts">210</span>
+      <span class="lb-time">04.891s</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── COMMUNITY ── -->
+<div class="community-section" id="komunita">
+  <div class="comm-visual reveal">
+    <div class="comm-photo-grid">
+
+      <!-- RACE_01 — startovní grid s dráhou -->
+      <div class="comm-photo" style="background:linear-gradient(135deg,#020c20,#010810);overflow:hidden;">
+        <svg width="100%" height="100%" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- perspektivní grid podlahy -->
+          <defs>
+            <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00AAFF" stop-opacity="0"/><stop offset="100%" stop-color="#00AAFF" stop-opacity="0.15"/></linearGradient>
+            <linearGradient id="glowL" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00FFEE" stop-opacity="0"/><stop offset="50%" stop-color="#00FFEE" stop-opacity="0.6"/><stop offset="100%" stop-color="#00FFEE" stop-opacity="0"/></linearGradient>
+          </defs>
+          <!-- grid lines perspective -->
+          <line x1="300" y1="60" x2="0"   y2="200" stroke="#00AAFF" stroke-opacity="0.1" stroke-width="1"/>
+          <line x1="300" y1="60" x2="100" y2="200" stroke="#00AAFF" stroke-opacity="0.1" stroke-width="1"/>
+          <line x1="300" y1="60" x2="200" y2="200" stroke="#00AAFF" stroke-opacity="0.1" stroke-width="1"/>
+          <line x1="300" y1="60" x2="300" y2="200" stroke="#00AAFF" stroke-opacity="0.12" stroke-width="1"/>
+          <line x1="300" y1="60" x2="400" y2="200" stroke="#00AAFF" stroke-opacity="0.1" stroke-width="1"/>
+          <line x1="300" y1="60" x2="500" y2="200" stroke="#00AAFF" stroke-opacity="0.1" stroke-width="1"/>
+          <line x1="300" y1="60" x2="600" y2="200" stroke="#00AAFF" stroke-opacity="0.1" stroke-width="1"/>
+          <line x1="50"  y1="110" x2="550" y2="110" stroke="#00AAFF" stroke-opacity="0.08" stroke-width="1"/>
+          <line x1="20"  y1="140" x2="580" y2="140" stroke="#00AAFF" stroke-opacity="0.08" stroke-width="1"/>
+          <line x1="0"   y1="170" x2="600" y2="170" stroke="#00AAFF" stroke-opacity="0.08" stroke-width="1"/>
+          <!-- gate arch -->
+          <ellipse cx="300" cy="80" rx="90" ry="40" fill="none" stroke="#00FFEE" stroke-width="1.5" stroke-opacity="0.5"/>
+          <ellipse cx="300" cy="80" rx="90" ry="40" fill="none" stroke="#00FFEE" stroke-width="8" stroke-opacity="0.04"/>
+          <line x1="210" y1="80" x2="210" y2="160" stroke="#00FFEE" stroke-opacity="0.3" stroke-width="1.5"/>
+          <line x1="390" y1="80" x2="390" y2="160" stroke="#00FFEE" stroke-opacity="0.3" stroke-width="1.5"/>
+          <!-- start/finish line -->
+          <rect x="240" y="158" width="120" height="6" fill="none" stroke="#FFE600" stroke-opacity="0.5" stroke-width="1"/>
+          <rect x="240" y="158" width="12" height="6" fill="#FFE600" fill-opacity="0.4"/>
+          <rect x="264" y="158" width="12" height="6" fill="#FFE600" fill-opacity="0.4"/>
+          <rect x="288" y="158" width="12" height="6" fill="#FFE600" fill-opacity="0.4"/>
+          <rect x="312" y="158" width="12" height="6" fill="#FFE600" fill-opacity="0.4"/>
+          <rect x="336" y="158" width="12" height="6" fill="#FFE600" fill-opacity="0.4"/>
+          <!-- drone 1 - animated -->
+          <g transform="translate(270,72)">
+            <animateTransform attributeName="transform" type="translate" values="270,72;272,70;270,72" dur="3s" repeatCount="indefinite"/>
+            <circle cx="0" cy="0" r="3" fill="#00FFEE" opacity="0.9"/>
+            <circle cx="-8" cy="-4" r="5" fill="none" stroke="#00AAFF" stroke-width="1" opacity="0.6"/>
+            <circle cx="8" cy="-4" r="5" fill="none" stroke="#00AAFF" stroke-width="1" opacity="0.6"/>
+            <circle cx="-8" cy="4" r="5" fill="none" stroke="#00AAFF" stroke-width="1" opacity="0.6"/>
+            <circle cx="8" cy="4" r="5" fill="none" stroke="#00AAFF" stroke-width="1" opacity="0.6"/>
+            <line x1="-8" y1="-4" x2="8" y2="-4" stroke="#00AAFF" stroke-width="1" opacity="0.5"/>
+            <line x1="-8" y1="4" x2="8" y2="4" stroke="#00AAFF" stroke-width="1" opacity="0.5"/>
+            <line x1="-8" y1="-4" x2="-8" y2="4" stroke="#00AAFF" stroke-width="1" opacity="0.5"/>
+            <line x1="8" y1="-4" x2="8" y2="4" stroke="#00AAFF" stroke-width="1" opacity="0.5"/>
+            <circle cx="0" cy="0" r="10" fill="#00FFEE" fill-opacity="0.06"/>
+          </g>
+          <!-- drone 2 smaller -->
+          <g transform="translate(330,76)">
+            <animateTransform attributeName="transform" type="translate" values="330,76;328,74;330,76" dur="2.5s" repeatCount="indefinite"/>
+            <circle cx="0" cy="0" r="2.5" fill="#FF0080" opacity="0.8"/>
+            <circle cx="-6" cy="-3" r="4" fill="none" stroke="#FF0080" stroke-width="1" opacity="0.5"/>
+            <circle cx="6" cy="-3" r="4" fill="none" stroke="#FF0080" stroke-width="1" opacity="0.5"/>
+            <circle cx="-6" cy="3" r="4" fill="none" stroke="#FF0080" stroke-width="1" opacity="0.5"/>
+            <circle cx="6" cy="3" r="4" fill="none" stroke="#FF0080" stroke-width="1" opacity="0.5"/>
+            <line x1="-6" y1="-3" x2="6" y2="-3" stroke="#FF0080" stroke-width="0.8" opacity="0.4"/>
+            <line x1="-6" y1="3" x2="6" y2="3" stroke="#FF0080" stroke-width="0.8" opacity="0.4"/>
+            <line x1="-6" y1="-3" x2="-6" y2="3" stroke="#FF0080" stroke-width="0.8" opacity="0.4"/>
+            <line x1="6" y1="-3" x2="6" y2="3" stroke="#FF0080" stroke-width="0.8" opacity="0.4"/>
+          </g>
+          <!-- speed lines -->
+          <line x1="0" y1="95" x2="180" y2="90" stroke="#00FFEE" stroke-opacity="0.12" stroke-width="1"/>
+          <line x1="0" y1="100" x2="150" y2="97" stroke="#00FFEE" stroke-opacity="0.08" stroke-width="0.5"/>
+          <!-- glow beam under gate -->
+          <rect x="240" y="76" width="120" height="2" fill="url(#glowL)" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+          </rect>
+          <!-- scanline overlay -->
+          <rect x="0" y="0" width="600" height="200" fill="url(#floorG)"/>
+        </svg>
+        <span class="corner-label">RACE_01 · GATE_A</span>
+      </div>
+
+      <!-- WINNERS — podium -->
+      <div class="comm-photo" id="commPodium" style="background:linear-gradient(135deg,#0a0800,#020408);overflow:hidden;">
+        <svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="goldG" cx="50%" cy="0%" r="80%"><stop offset="0%" stop-color="#FFE600" stop-opacity="0.2"/><stop offset="100%" stop-color="#FFE600" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect x="0" y="0" width="300" height="200" fill="url(#goldG)"/>
+          <!-- podium blocks -->
+          <!-- 2nd -->
+          <rect x="60" y="120" width="60" height="55" fill="#00AAFF" fill-opacity="0.08" stroke="#00AAFF" stroke-opacity="0.2" stroke-width="1"/>
+          <text x="90" y="145" font-family="'Orbitron',sans-serif" font-size="9" fill="#aaa" text-anchor="middle" opacity="0.6">2</text>
+          <text x="90" y="118" font-family="'Orbitron',sans-serif" font-size="7" fill="#ccc" text-anchor="middle" opacity="0.5">WHOOPMASTER</text>
+          <!-- 1st -->
+          <rect x="120" y="95" width="60" height="80" fill="#FFE600" fill-opacity="0.1" stroke="#FFE600" stroke-opacity="0.4" stroke-width="1"/>
+          <text x="150" y="115" font-family="'Orbitron',sans-serif" font-size="11" fill="#FFE600" text-anchor="middle" opacity="0.9">1</text>
+          <text x="150" y="93" font-family="'Orbitron',sans-serif" font-size="7" fill="#FFE600" text-anchor="middle" opacity="0.7">SPEEDY_CZ</text>
+          <!-- 3rd -->
+          <rect x="180" y="135" width="60" height="40" fill="#00AAFF" fill-opacity="0.06" stroke="#00AAFF" stroke-opacity="0.15" stroke-width="1"/>
+          <text x="210" y="157" font-family="'Orbitron',sans-serif" font-size="9" fill="#888" text-anchor="middle" opacity="0.5">3</text>
+          <text x="210" y="133" font-family="'Orbitron',sans-serif" font-size="7" fill="#aaa" text-anchor="middle" opacity="0.4">FASTIK99</text>
+          <!-- trophy glow -->
+          <circle cx="150" cy="60" r="28" fill="#FFE600" fill-opacity="0.04"/>
+          <circle cx="150" cy="60" r="16" fill="#FFE600" fill-opacity="0.08"/>
+          <!-- trophy shape -->
+          <path d="M143,48 L157,48 L160,58 Q155,65 150,66 Q145,65 140,58 Z" fill="none" stroke="#FFE600" stroke-width="1.2" stroke-opacity="0.7"/>
+          <line x1="150" y1="66" x2="150" y2="72" stroke="#FFE600" stroke-width="1.2" stroke-opacity="0.6"/>
+          <line x1="144" y1="72" x2="156" y2="72" stroke="#FFE600" stroke-width="1.5" stroke-opacity="0.6"/>
+          <path d="M140,52 Q134,54 135,60 Q137,63 140,62" fill="none" stroke="#FFE600" stroke-width="1" stroke-opacity="0.5"/>
+          <path d="M160,52 Q166,54 165,60 Q163,63 160,62" fill="none" stroke="#FFE600" stroke-width="1" stroke-opacity="0.5"/>
+          <!-- star particles -->
+          <circle cx="120" cy="40" r="1.5" fill="#FFE600" opacity="0.6"><animate attributeName="opacity" values="0.6;0.1;0.6" dur="2.1s" repeatCount="indefinite"/></circle>
+          <circle cx="185" cy="35" r="1" fill="#FFE600" opacity="0.4"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="1.7s" repeatCount="indefinite"/></circle>
+          <circle cx="130" cy="28" r="1" fill="#00FFEE" opacity="0.5"><animate attributeName="opacity" values="0.5;0.1;0.5" dur="2.5s" repeatCount="indefinite"/></circle>
+          <circle cx="175" cy="45" r="1.5" fill="#00FFEE" opacity="0.3"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.9s" repeatCount="indefinite"/></circle>
+        </svg>
+        <span class="corner-label">RACE_01 · PODIUM</span>
+      </div>
+
+      <!-- PILOTS — pilot grid -->
+      <div class="comm-photo" id="commPilots" style="background:linear-gradient(135deg,#030810,#020408);overflow:hidden;">
+        <svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="pilotGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00AAFF" stop-opacity="0.15"/><stop offset="100%" stop-color="#00AAFF" stop-opacity="0"/></radialGradient>
+          </defs>
+          <!-- pilot cards grid -->
+          <g opacity="0.9">
+            <!-- pilot 1 -->
+            <rect x="20" y="30" width="70" height="55" rx="2" fill="#00AAFF" fill-opacity="0.05" stroke="#00FFEE" stroke-width="1" stroke-opacity="0.4"/>
+            <circle cx="55" cy="52" r="12" fill="#00AAFF" fill-opacity="0.1" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.3"/>
+            <text x="55" y="57" font-size="12" text-anchor="middle">🧑‍✈️</text>
+            <text x="55" y="77" font-family="monospace" font-size="6" fill="#00FFEE" text-anchor="middle" opacity="0.8">SPEEDY_CZ</text>
+            <rect x="20" y="30" width="70" height="2" fill="#00FFEE" fill-opacity="0.5"/>
+            <!-- pilot 2 -->
+            <rect x="115" y="30" width="70" height="55" rx="2" fill="#00AAFF" fill-opacity="0.04" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.2"/>
+            <circle cx="150" cy="52" r="12" fill="#00AAFF" fill-opacity="0.08" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.2"/>
+            <text x="150" y="57" font-size="12" text-anchor="middle">🎮</text>
+            <text x="150" y="77" font-family="monospace" font-size="6" fill="#aaa" text-anchor="middle" opacity="0.7">WHOOPMASTER</text>
+            <!-- pilot 3 -->
+            <rect x="210" y="30" width="70" height="55" rx="2" fill="#00AAFF" fill-opacity="0.04" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.2"/>
+            <circle cx="245" cy="52" r="12" fill="#00AAFF" fill-opacity="0.08" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.2"/>
+            <text x="245" y="57" font-size="12" text-anchor="middle">🚀</text>
+            <text x="245" y="77" font-family="monospace" font-size="6" fill="#aaa" text-anchor="middle" opacity="0.7">FASTIK99</text>
+            <!-- row 2 -->
+            <rect x="20"  y="105" width="55" height="45" rx="2" fill="#00AAFF" fill-opacity="0.03" stroke="#00AAFF" stroke-width="0.8" stroke-opacity="0.15"/>
+            <text x="47"  y="131" font-family="monospace" font-size="6" fill="#888" text-anchor="middle" opacity="0.5">DRONEKING</text>
+            <rect x="90"  y="105" width="55" height="45" rx="2" fill="#00AAFF" fill-opacity="0.03" stroke="#00AAFF" stroke-width="0.8" stroke-opacity="0.15"/>
+            <text x="117" y="131" font-family="monospace" font-size="6" fill="#888" text-anchor="middle" opacity="0.5">MICRO_FPV</text>
+            <rect x="160" y="105" width="55" height="45" rx="2" fill="#00AAFF" fill-opacity="0.03" stroke="#00AAFF" stroke-width="0.8" stroke-opacity="0.15"/>
+            <text x="187" y="131" font-family="monospace" font-size="6" fill="#888" text-anchor="middle" opacity="0.5">INDOORKING</text>
+            <rect x="230" y="105" width="50" height="45" rx="2" fill="#00AAFF" fill-opacity="0.03" stroke="#00AAFF" stroke-width="0.8" stroke-opacity="0.15"/>
+            <text x="255" y="131" font-family="monospace" font-size="6" fill="#888" text-anchor="middle" opacity="0.5">+26 dalších</text>
+          </g>
+          <!-- scan line -->
+          <rect x="0" y="0" width="300" height="200" fill="url(#pilotGlow)"/>
+          <line x1="0" y1="0" x2="300" y2="0" stroke="#00FFEE" stroke-opacity="0.06" stroke-width="1">
+            <animate attributeName="y1" values="0;200;0" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="y2" values="0;200;0" dur="4s" repeatCount="indefinite"/>
+          </line>
+        </svg>
+        <span class="corner-label">RACE_01 · 32 PILOTS</span>
+      </div>
+
+      <!-- PIT LANE — technická příprava -->
+      <div class="comm-photo" style="background:linear-gradient(135deg,#020408,#050210);overflow:hidden;">
+        <svg width="100%" height="100%" viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <!-- workbench surface -->
+          <rect x="0" y="80" width="300" height="3" fill="#00AAFF" fill-opacity="0.15"/>
+          <rect x="0" y="83" width="300" height="47" fill="#00AAFF" fill-opacity="0.03"/>
+          <!-- drone on bench - detailed -->
+          <g transform="translate(110, 68)">
+            <animateTransform attributeName="transform" type="translate" values="110,68;110,66;110,68" dur="3.5s" repeatCount="indefinite"/>
+            <!-- body -->
+            <rect x="-18" y="-8" width="36" height="16" rx="3" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/>
+            <!-- FC indicator -->
+            <rect x="-6" y="-4" width="12" height="8" rx="1" fill="#00FFEE" fill-opacity="0.2" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.6"/>
+            <circle cx="0" cy="0" r="2" fill="#00FFEE" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0.2;0.8" dur="1s" repeatCount="indefinite"/>
+            </circle>
+            <!-- arms -->
+            <line x1="-18" y1="-8" x2="-28" y2="-18" stroke="#00AAFF" stroke-width="2" stroke-opacity="0.5"/>
+            <line x1="18"  y1="-8" x2="28"  y2="-18" stroke="#00AAFF" stroke-width="2" stroke-opacity="0.5"/>
+            <line x1="-18" y1="8"  x2="-28" y2="18"  stroke="#00AAFF" stroke-width="2" stroke-opacity="0.5"/>
+            <line x1="18"  y1="8"  x2="28"  y2="18"  stroke="#00AAFF" stroke-width="2" stroke-opacity="0.5"/>
+            <!-- motors -->
+            <circle cx="-28" cy="-18" r="5" fill="#00AAFF" fill-opacity="0.1" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/>
+            <circle cx="28"  cy="-18" r="5" fill="#00AAFF" fill-opacity="0.1" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/>
+            <circle cx="-28" cy="18"  r="5" fill="#00AAFF" fill-opacity="0.1" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/>
+            <circle cx="28"  cy="18"  r="5" fill="#00AAFF" fill-opacity="0.1" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/>
+            <!-- props spinning -->
+            <circle cx="-28" cy="-18" r="8" fill="none" stroke="#00FFEE" stroke-width="0.5" stroke-opacity="0.3" stroke-dasharray="4 4">
+              <animateTransform attributeName="transform" type="rotate" values="0 -28 -18;360 -28 -18" dur="0.3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="28"  cy="-18" r="8" fill="none" stroke="#00FFEE" stroke-width="0.5" stroke-opacity="0.3" stroke-dasharray="4 4">
+              <animateTransform attributeName="transform" type="rotate" values="360 28 -18;0 28 -18" dur="0.3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="-28" cy="18"  r="8" fill="none" stroke="#00FFEE" stroke-width="0.5" stroke-opacity="0.3" stroke-dasharray="4 4">
+              <animateTransform attributeName="transform" type="rotate" values="360 -28 18;0 -28 18" dur="0.3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="28"  cy="18"  r="8" fill="none" stroke="#00FFEE" stroke-width="0.5" stroke-opacity="0.3" stroke-dasharray="4 4">
+              <animateTransform attributeName="transform" type="rotate" values="0 28 18;360 28 18" dur="0.3s" repeatCount="indefinite"/>
+            </circle>
+            <!-- glow -->
+            <circle cx="0" cy="0" r="20" fill="#00AAFF" fill-opacity="0.04"/>
+          </g>
+          <!-- tools on bench -->
+          <rect x="190" y="72" width="40" height="5" rx="2" fill="#555" fill-opacity="0.6"/>
+          <rect x="195" y="68" width="4" height="9" rx="1" fill="#888" fill-opacity="0.5"/>
+          <circle cx="240" cy="74" r="6" fill="none" stroke="#666" stroke-width="1" stroke-opacity="0.5"/>
+          <rect x="250" y="70" width="25" height="8" rx="2" fill="#333" fill-opacity="0.4" stroke="#555" stroke-width="0.5"/>
+          <!-- battery indicator -->
+          <rect x="20" y="68" width="50" height="18" rx="2" fill="#00AAFF" fill-opacity="0.05" stroke="#00AAFF" stroke-opacity="0.3" stroke-width="1"/>
+          <rect x="22" y="70" width="20" height="14" rx="1" fill="#00ff88" fill-opacity="0.3"/>
+          <text x="70" y="80" font-family="monospace" font-size="7" fill="#00ff88" opacity="0.7" text-anchor="end">READY</text>
+          <!-- data readout -->
+          <text x="15" y="100" font-family="monospace" font-size="6" fill="#00AAFF" opacity="0.4">VOLTAGE: 4.20V</text>
+          <text x="15" y="110" font-family="monospace" font-size="6" fill="#00AAFF" opacity="0.3">MOTORS: OK</text>
+          <text x="15" y="120" font-family="monospace" font-size="6" fill="#00AAFF" opacity="0.25">BIND: ELRS 2.4GHz</text>
+          <text x="200" y="100" font-family="monospace" font-size="6" fill="#00FFEE" opacity="0.35">VTX: CH3/5.8G</text>
+          <text x="200" y="110" font-family="monospace" font-size="6" fill="#00FFEE" opacity="0.25">RSSI: -67dBm</text>
+        </svg>
+        <span class="corner-label">PIT_LANE · PREP</span>
+      </div>
+    </div>
+  </div>
+  <div class="comm-text reveal">
+    <p class="sec-eyebrow">Komunita</p>
+    <h2 class="sec-title">Připoj se<br>k FPV<br>komunitě.</h2>
+    <p>Stále plánujeme společné tréninky po celé Praze a okolí. Přes 4 000 sledujících na sociálních sítích. Jsme největší česká whoop komunita.</p>
+    <div class="social-row">
+      <a href="https://facebook.com/whoopleague" target="_blank" class="social-btn">
+        <span>f</span> Facebook — závody, registrace, novinky
+        <span class="social-count">Sledovat →</span>
+      </a>
+      <a href="https://instagram.com/cwl.czech" target="_blank" class="social-btn">
+        <span>◎</span> Instagram — fotky a videa ze závodů
+        <span class="social-count">Sledovat →</span>
+      </a>
+      <a href="https://youtube.com/@whoopleague" target="_blank" class="social-btn">
+        <span>▶</span> YouTube — závodní sestřihy a livestreamy
+        <span class="social-count">Odebírat →</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ── STEPS ── -->
+<div class="steps-section" id="trening">
+  <p class="sec-eyebrow">Začít je jednoduché</p>
+  <h2 class="sec-title">Začni<br>s tréninkem</h2>
+
+  <div class="steps-grid">
+    <div class="step-card reveal">
+      <div class="step-n">01</div>
+      <h3 class="step-title">Poříď si vybavení</h3>
+      <p class="step-desc">Projdi si doporučené vybavení pro začátečníky. Vše, co potřebuješ pro svůj první let – od dronu přes ovladač až po brýle.</p>
+      <a href="#" class="step-link">Jak začít</a>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-n">02</div>
+      <h3 class="step-title">Přijď na trénink</h3>
+      <p class="step-desc">Přijď na nejbližší trénink a setkej se s komunitou. Zkušení piloti ti pomůžou s prvními lety a nastavením dronu.</p>
+      <a href="#" class="step-link">Tréninky</a>
+    </div>
+    <div class="step-card reveal">
+      <div class="step-n">03</div>
+      <h3 class="step-title">Závoď v lize</h3>
+      <p class="step-desc">Přečti si pravidla Czech Whoop League, zaregistruj se a závoď o titul nejlepšího českého whoop pilota sezóny 2026.</p>
+      <a href="#" class="step-link">Pravidla</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── TEAM ── -->
+<div class="team-section" id="tym">
+  <p class="sec-eyebrow">Za CWL stojí</p>
+  <h2 class="sec-title">Náš tým</h2>
+
+  <div class="team-grid">
+    <div class="team-card reveal" data-role="MEDIA">
+      <div class="team-ava">👨‍💻</div>
+      <div class="team-name">David Vajt</div>
+      <div class="team-role">Race &amp; Media Manager</div>
+    </div>
+    <div class="team-card reveal" data-role="TIMER">
+      <div class="team-ava">🎛</div>
+      <div class="team-name">Jiří Šimek</div>
+      <div class="team-role">Lead Timer Tech</div>
+    </div>
+    <div class="team-card reveal" data-role="TECH">
+      <div class="team-ava">🔧</div>
+      <div class="team-name">Jakub Folberger</div>
+      <div class="team-role">General Technician</div>
+    </div>
+    <div class="team-card reveal" data-role="SOUND">
+      <div class="team-ava">🎵</div>
+      <div class="team-name">Petr Tenčík</div>
+      <div class="team-role">Event Soundmaster</div>
+    </div>
+    <div class="team-card reveal" data-role="LAP">
+      <div class="team-ava">🏁</div>
+      <div class="team-name">Daniel Habánák</div>
+      <div class="team-role">Lap Timer</div>
+    </div>
+    <div class="team-card reveal" data-role="TECH">
+      <div class="team-ava">⚙</div>
+      <div class="team-name">Tobiáš Kopečka</div>
+      <div class="team-role">General Technician</div>
+    </div>
+    <div class="team-card reveal" data-role="JOIN">
+      <div class="team-ava" style="border-style:dashed;border-color:rgba(0,170,255,0.2);color:rgba(0,170,255,0.3);font-size:20px;">+</div>
+      <div class="team-name" style="color:rgba(255,255,255,0.2);">Připoj se</div>
+      <div class="team-role" style="color:rgba(0,170,255,0.3);">Hledáme posilu</div>
+    </div>
+    <div class="team-card reveal" data-role="SPONZOR">
+      <div class="team-ava" style="border-color:rgba(255,230,0,0.3);">💛</div>
+      <div class="team-name">Sponzoři</div>
+      <div class="team-role" style="color:rgba(255,230,0,0.5);">Hobby Drone · Rotorama</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONTEST ── -->
+<div class="contest-section">
+  <div class="contest-inner">
+    <div class="contest-left reveal">
+      <p class="sec-eyebrow">Speciální výzva · Sezóna 2026</p>
+      <h2 class="sec-title">Soutěž o<br><span class="accent">nejlehčího</span><br>Whoopa!</h2>
+      <p class="contest-desc">Myslíš, že máš whoopa nejlehčího a nejlepšího v celé Čechách? Zapoj se do speciální Featherweight Challenge a ukaž to světu.</p>
+      <a onclick="showPage('pravidla');return false;" class="cta-main">🏆 Pravidla soutěže</a>
+    </div>
+    <div class="contest-right">
+      <div class="contest-bg-num">1S</div>
+      <div class="contest-drone">
+        <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 30px rgba(0,255,238,0.25))">
+          <!-- body -->
+          <rect x="85" y="95" width="50" height="30" rx="6" fill="#00AAFF" fill-opacity="0.12" stroke="#00FFEE" stroke-width="1.5"/>
+          <!-- FC board -->
+          <rect x="96" y="102" width="28" height="16" rx="3" fill="#00FFEE" fill-opacity="0.12" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.5"/>
+          <circle cx="110" cy="110" r="4" fill="#00FFEE" fill-opacity="0.4">
+            <animate attributeName="fill-opacity" values="0.4;0.9;0.4" dur="1.2s" repeatCount="indefinite"/>
+          </circle>
+          <!-- arms -->
+          <line x1="88" y1="98" x2="52" y2="68" stroke="#00AAFF" stroke-width="3" stroke-opacity="0.6"/>
+          <line x1="132" y1="98" x2="168" y2="68" stroke="#00AAFF" stroke-width="3" stroke-opacity="0.6"/>
+          <line x1="88" y1="122" x2="52" y2="152" stroke="#00AAFF" stroke-width="3" stroke-opacity="0.6"/>
+          <line x1="132" y1="122" x2="168" y2="152" stroke="#00AAFF" stroke-width="3" stroke-opacity="0.6"/>
+          <!-- motors -->
+          <circle cx="52" cy="68" r="9" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/>
+          <circle cx="168" cy="68" r="9" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/>
+          <circle cx="52" cy="152" r="9" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/>
+          <circle cx="168" cy="152" r="9" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/>
+          <!-- props spinning TL -->
+          <ellipse cx="52" cy="68" rx="26" ry="4" fill="none" stroke="#00FFEE" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="6 4">
+            <animateTransform attributeName="transform" type="rotate" values="0 52 68;360 52 68" dur="0.25s" repeatCount="indefinite"/>
+          </ellipse>
+          <!-- props spinning TR -->
+          <ellipse cx="168" cy="68" rx="26" ry="4" fill="none" stroke="#00FFEE" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="6 4">
+            <animateTransform attributeName="transform" type="rotate" values="360 168 68;0 168 68" dur="0.25s" repeatCount="indefinite"/>
+          </ellipse>
+          <!-- props spinning BL -->
+          <ellipse cx="52" cy="152" rx="26" ry="4" fill="none" stroke="#00FFEE" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="6 4">
+            <animateTransform attributeName="transform" type="rotate" values="360 52 152;0 52 152" dur="0.25s" repeatCount="indefinite"/>
+          </ellipse>
+          <!-- props spinning BR -->
+          <ellipse cx="168" cy="152" rx="26" ry="4" fill="none" stroke="#00FFEE" stroke-width="1" stroke-opacity="0.5" stroke-dasharray="6 4">
+            <animateTransform attributeName="transform" type="rotate" values="0 168 152;360 168 152" dur="0.25s" repeatCount="indefinite"/>
+          </ellipse>
+          <!-- camera -->
+          <rect x="104" y="120" width="12" height="8" rx="2" fill="#00AAFF" fill-opacity="0.3" stroke="#00AAFF" stroke-width="1"/>
+          <circle cx="110" cy="124" r="3" fill="#00FFEE" fill-opacity="0.6"/>
+          <!-- video signal lines -->
+          <path d="M110 132 Q110 148 95 155" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.2" stroke-dasharray="3 3"/>
+          <path d="M110 132 Q110 148 125 155" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.2" stroke-dasharray="3 3"/>
+          <!-- hover animation wrapper -->
+          <animateTransform attributeName="transform" type="translate" values="0,0;0,-6;0,0" dur="3s" repeatCount="indefinite"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page-home -->
+
+<!-- ══════════════════════════════════════
+     PAGE: ZÁVODY
+══════════════════════════════════════ -->
+<div class="page" id="page-zavody">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-glow"></div>
+    <div class="page-hero-content">
+      <p class="page-eyebrow">Sezóna 2026 · Kalendář</p>
+      <h1 class="page-title">Závody<br><em>2026</em></h1>
+      <p class="page-desc">Všechny ligové závody sezóny 2026. Registrace probíhají vždy 2 týdny před závody přes náš Facebook.</p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="season-overview reveal">
+      <div class="overview-stat"><div class="overview-num">6</div><div class="overview-lbl">Závodů celkem</div></div>
+      <div class="overview-stat"><div class="overview-num">2</div><div class="overview-lbl">Odehráno</div></div>
+      <div class="overview-stat"><div class="overview-num">4</div><div class="overview-lbl">Zbývá</div></div>
+      <div class="overview-stat"><div class="overview-num">40+</div><div class="overview-lbl">Pilotů v sezóně</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="calendar-filters reveal">
+      <button class="filter-btn active" onclick="setRaceFilter('all',this)">Vše</button>
+      <button class="filter-btn" onclick="setRaceFilter('nadchazejici',this)">Nadcházející</button>
+      <button class="filter-btn" onclick="setRaceFilter('odehrano',this)">Odehráno</button>
+    </div>
+    <div class="race-list reveal" id="raceList"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: VÝSLEDKY
+══════════════════════════════════════ -->
+<div class="page" id="page-vysledky">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-glow" style="background:rgba(255,230,0,.07)"></div>
+    <div class="page-hero-content">
+      <p class="page-eyebrow">Sezóna 2026 · Standings</p>
+      <h1 class="page-title">Výsledky<br><em>&amp;</em> Liga</h1>
+      <p class="page-desc">Aktuální pořadí ligové tabulky sezóny 2026 a výsledky odehraných závodů.</p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="results-tabs reveal">
+      <button class="rtab active" onclick="switchTab(this,'tab-standings')">Ligová tabulka</button>
+      <button class="rtab" onclick="switchTab(this,'tab-results')">Výsledky závodů</button>
+    </div>
+    <div class="results-panel active reveal" id="tab-standings">
+      <table class="standings-table">
+        <thead><tr><th>#</th><th>Pilot</th><th>Body</th><th>Závody</th><th>Best lap</th><th>Trend</th></tr></thead>
+        <tbody id="standingsBody">
+        </tbody>
+      </table>
+    </div>
+    <div class="results-panel" id="tab-results">
+      <div id="resultsBody"></div>
+      <div class="result-card reveal" style="display:none">
+        <div class="result-race-tag">Race_01 · 25. ledna 2026 · Hostivice</div>
+        <div class="result-race-name">1. Ligový závod — Výsledky</div>
+        <div class="result-podium">
+          <div class="result-p-item p1"><span class="result-p-pos">🥇 1. místo</span><div class="result-p-name">SPEEDY_CZ</div><div class="result-p-time">04.231s · 340 bodů</div></div>
+          <div class="result-p-item p2"><span class="result-p-pos">🥈 2. místo</span><div class="result-p-name">WHOOPMASTER</div><div class="result-p-time">04.388s · 295 bodů</div></div>
+          <div class="result-p-item p3"><span class="result-p-pos">🥉 3. místo</span><div class="result-p-name">FASTIK99</div><div class="result-p-time">04.512s · 280 bodů</div></div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:12px;align-items:center">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,170,255,.4)">32 pilotů · Indoor · Hostivice</span>
+        </div>
+      </div>
+      <div class="result-card reveal">
+        <div class="result-race-tag">Race_02 · 28. února 2026 · Hostivice</div>
+        <div class="result-race-name">2. Ligový závod — Výsledky</div>
+        <div class="result-podium">
+          <div class="result-p-item p1"><span class="result-p-pos">🥇 1. místo</span><div class="result-p-name">— doplnit —</div><div class="result-p-time">čas · body</div></div>
+          <div class="result-p-item p2"><span class="result-p-pos">🥈 2. místo</span><div class="result-p-name">— doplnit —</div><div class="result-p-time">čas · body</div></div>
+          <div class="result-p-item p3"><span class="result-p-pos">🥉 3. místo</span><div class="result-p-name">— doplnit —</div><div class="result-p-time">čas · body</div></div>
+        </div>
+        <div style="margin-top:16px">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,230,0,.5);letter-spacing:.1em">⚠ Výsledky budou doplněny</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: JAK ZAČÍT
+══════════════════════════════════════ -->
+<div class="page" id="page-start">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-glow" style="background:rgba(0,255,238,.07)"></div>
+    <div class="page-hero-content">
+      <p class="page-eyebrow">Začátečnický průvodce</p>
+      <h1 class="page-title">Jak<br><em>začít</em></h1>
+      <p class="page-desc">Kompletní průvodce pro každého, kdo chce začít závodit s 1S FPV drony v Czech Whoop League.</p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="start-steps reveal">
+      <div class="start-step">
+        <div class="step-big-n">01</div>
+        <div class="step-content">
+          <div class="step-title-big">Poříď si vybavení</div>
+          <div class="step-body">Začni s doporučenou sestavou pro 1S whoop třídu. Níže najdeš doporučené produkty s cenami.</div>
+          <div class="step-tags"><span class="step-tag">Meteor 65 Pro</span><span class="step-tag">Radiomaster Pocket</span><span class="step-tag">Skyzone Cobra X</span></div>
+        </div>
+        <div class="step-visual">
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 16px rgba(0,255,238,.3))">
+            <rect x="46" y="52" width="28" height="16" rx="4" fill="#00AAFF" fill-opacity="0.12" stroke="#00FFEE" stroke-width="1.2"/>
+            <circle cx="60" cy="60" r="3" fill="#00FFEE" fill-opacity="0.7"><animate attributeName="fill-opacity" values="0.7;0.2;0.7" dur="1.1s" repeatCount="indefinite"/></circle>
+            <line x1="48" y1="54" x2="28" y2="38" stroke="#00AAFF" stroke-width="2" stroke-opacity="0.6"/>
+            <line x1="72" y1="54" x2="92" y2="38" stroke="#00AAFF" stroke-width="2" stroke-opacity="0.6"/>
+            <line x1="48" y1="66" x2="28" y2="82" stroke="#00AAFF" stroke-width="2" stroke-opacity="0.6"/>
+            <line x1="72" y1="66" x2="92" y2="82" stroke="#00AAFF" stroke-width="2" stroke-opacity="0.6"/>
+            <circle cx="28" cy="38" r="6" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.2" stroke-opacity="0.6"/>
+            <circle cx="92" cy="38" r="6" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.2" stroke-opacity="0.6"/>
+            <circle cx="28" cy="82" r="6" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.2" stroke-opacity="0.6"/>
+            <circle cx="92" cy="82" r="6" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1.2" stroke-opacity="0.6"/>
+            <ellipse cx="28" cy="38" rx="16" ry="3" fill="none" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="4 3"><animateTransform attributeName="transform" type="rotate" values="0 28 38;360 28 38" dur="0.22s" repeatCount="indefinite"/></ellipse>
+            <ellipse cx="92" cy="38" rx="16" ry="3" fill="none" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="4 3"><animateTransform attributeName="transform" type="rotate" values="360 92 38;0 92 38" dur="0.22s" repeatCount="indefinite"/></ellipse>
+            <ellipse cx="28" cy="82" rx="16" ry="3" fill="none" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="4 3"><animateTransform attributeName="transform" type="rotate" values="360 28 82;0 28 82" dur="0.22s" repeatCount="indefinite"/></ellipse>
+            <ellipse cx="92" cy="82" rx="16" ry="3" fill="none" stroke="#00FFEE" stroke-width="0.8" stroke-opacity="0.4" stroke-dasharray="4 3"><animateTransform attributeName="transform" type="rotate" values="0 92 82;360 92 82" dur="0.22s" repeatCount="indefinite"/></ellipse>
+            <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="2.8s" repeatCount="indefinite"/>
+          </svg>
+        </div>
+      </div>
+      <div class="start-step">
+        <div class="step-big-n">02</div>
+        <div class="step-content">
+          <div class="step-title-big">Natrénuj v simulátoru</div>
+          <div class="step-body">Velocidrone nebo Liftoff jsou skvělé volby. Min. 10 hodin v simu ti ušetří hodně zlomených vrtulí.</div>
+          <div class="step-tags"><span class="step-tag">Velocidrone</span><span class="step-tag">Liftoff</span><span class="step-tag">DRL Simulator (zdarma)</span></div>
+        </div>
+        <div class="step-visual">🎮</div>
+      </div>
+      <div class="start-step">
+        <div class="step-big-n">03</div>
+        <div class="step-content">
+          <div class="step-title-big">Přijď na trénink &amp; závoď</div>
+          <div class="step-body">Sleduj náš Facebook nebo Instagram. Registrace probíhají 2 týdny před závodem.</div>
+          <div class="step-tags"><span class="step-tag">Facebook: CWL Czech</span><span class="step-tag">Instagram: @cwl.czech</span></div>
+          <div style="margin-top:20px"><button class="btn btn-cyan" onclick="showPage('zavody')">Zobrazit závody →</button></div>
+        </div>
+        <div class="step-visual">🏁</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="sec-label reveal">Doporučené vybavení</div>
+    <div class="gear-grid reveal">
+      <div class="gear-card"><div class="gear-icon"><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="17" width="12" height="6" rx="2" fill="#00AAFF" fill-opacity="0.2" stroke="#00FFEE" stroke-width="1"/><circle cx="20" cy="20" r="2" fill="#00FFEE" fill-opacity="0.8"><animate attributeName="fill-opacity" values="0.8;0.2;0.8" dur="1s" repeatCount="indefinite"/></circle><line x1="15" y1="18" x2="7" y2="12" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/><line x1="25" y1="18" x2="33" y2="12" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/><line x1="15" y1="22" x2="7" y2="28" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/><line x1="25" y1="22" x2="33" y2="28" stroke="#00AAFF" stroke-width="1.5" stroke-opacity="0.6"/><circle cx="7" cy="12" r="4" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/><circle cx="33" cy="12" r="4" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/><circle cx="7" cy="28" r="4" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/><circle cx="33" cy="28" r="4" fill="#00AAFF" fill-opacity="0.15" stroke="#00AAFF" stroke-width="1" stroke-opacity="0.5"/><ellipse cx="7" cy="12" rx="7" ry="1.5" fill="none" stroke="#00FFEE" stroke-width="0.7" stroke-opacity="0.35" stroke-dasharray="3 2"><animateTransform attributeName="transform" type="rotate" values="0 7 12;360 7 12" dur="0.2s" repeatCount="indefinite"/></ellipse><ellipse cx="33" cy="12" rx="7" ry="1.5" fill="none" stroke="#00FFEE" stroke-width="0.7" stroke-opacity="0.35" stroke-dasharray="3 2"><animateTransform attributeName="transform" type="rotate" values="360 33 12;0 33 12" dur="0.2s" repeatCount="indefinite"/></ellipse><ellipse cx="7" cy="28" rx="7" ry="1.5" fill="none" stroke="#00FFEE" stroke-width="0.7" stroke-opacity="0.35" stroke-dasharray="3 2"><animateTransform attributeName="transform" type="rotate" values="360 7 28;0 7 28" dur="0.2s" repeatCount="indefinite"/></ellipse><ellipse cx="33" cy="28" rx="7" ry="1.5" fill="none" stroke="#00FFEE" stroke-width="0.7" stroke-opacity="0.35" stroke-dasharray="3 2"><animateTransform attributeName="transform" type="rotate" values="0 33 28;360 33 28" dur="0.2s" repeatCount="indefinite"/></ellipse></svg></div><div class="gear-name">Meteor 65 Pro</div><div class="gear-spec">BETAFPV · 65mm · 1S<br>Motor: 0802 22000KV<br>FC: F4 · 5A ESC</div><div class="gear-price">~1 200 Kč</div></div>
+      <div class="gear-card"><div class="gear-icon">🎛</div><div class="gear-name">Radiomaster Pocket</div><div class="gear-spec">ELRS 2.4GHz<br>Hall sensor gimbaly<br>Mode 2 doporučeno</div><div class="gear-price">~1 800 Kč</div></div>
+      <div class="gear-card"><div class="gear-icon">🥽</div><div class="gear-name">Skyzone Cobra X</div><div class="gear-spec">Box goggles · 1280×960<br>5.8GHz · DVR: Ano</div><div class="gear-price">~4 500 Kč</div></div>
+      <div class="gear-card"><div class="gear-icon">🔋</div><div class="gear-name">1S 300mAh LiPo</div><div class="gear-spec">300mAh · 75C<br>BT2.0 konektor</div><div class="gear-price">~600 Kč / 6ks</div></div>
+      <div class="gear-card"><div class="gear-icon">⚡</div><div class="gear-name">Nabíječka ISDT Q6 Plus</div><div class="gear-spec">14A · 300W<br>1–6S balancer</div><div class="gear-price">~1 400 Kč</div></div>
+      <div class="gear-card"><div class="gear-icon">🛠</div><div class="gear-name">Náhradní díly</div><div class="gear-spec">Props Gemfan 31mm<br>Motory 0802 · Šroubky</div><div class="gear-price">~800 Kč</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="sec-label reveal">Pravidla CWL</div>
+    <div class="rules-grid reveal">
+      <div class="rule-card"><div class="rule-n">01</div><div class="rule-title">Třída a specifikace</div><div class="rule-body">Výhradně 1S Whoop třída. Max rám 75mm, motor max 0802. BetaFlight s RPM limiterem dle sezónního nastavení.</div></div>
+      <div class="rule-card"><div class="rule-n">02</div><div class="rule-title">Formát závodu</div><div class="rule-body">Kvalifikační lety (3 kola), skupinová část a finálové jízdy. Hodnotí se nejlepší čas kola.</div></div>
+      <div class="rule-card"><div class="rule-n">03</div><div class="rule-title">Bodování</div><div class="rule-body">1. místo: 100 bodů · 2. místo: 80 bodů · 3. místo: 65 bodů. Bonus za nejrychlejší kolo: +15 bodů.</div></div>
+      <div class="rule-card"><div class="rule-n">04</div><div class="rule-title">Fair play</div><div class="rule-body">Záměrné kolize vedou k diskvalifikaci. Platná certifikace UAVCZ povinná.</div></div>
+      <div class="rule-card"><div class="rule-n">05</div><div class="rule-title">Přihlášení</div><div class="rule-body">Registrace 2 týdny před závodem. Max 32 pilotů. Startovné: 200 Kč na místě.</div></div>
+      <div class="rule-card"><div class="rule-n">06</div><div class="rule-title">Časomíra</div><div class="rule-body">ImmersionRC LapRF. Transponder povinný (zapůjčení za 50 Kč). Výsledky do 24h.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: TÝM
+══════════════════════════════════════ -->
+<div class="page" id="page-tym">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-glow" style="background:rgba(255,0,128,.06)"></div>
+    <div class="page-hero-content">
+      <p class="page-eyebrow">Za Czech Whoop League stojí</p>
+      <h1 class="page-title">Náš<br><em>tým</em></h1>
+      <p class="page-desc">Jsme parta nadšenců, kteří milují FPV drony a chtějí vybudovat co nejlepší závodní ligu v Čechách.</p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="team-hero-grid reveal">
+      <div><div class="team-big-num">7</div><div class="team-big-lbl">Členů týmu</div></div>
+      <div style="font-size:15px;line-height:1.75;color:rgba(255,255,255,.4)">Czech Whoop League vznikla z potřeby mít v Čechách kvalitní, pravidelnou a férovou ligu pro 1S FPV whoopy. Každý člen přináší jiné skills — dohromady vytváříme nejlepší závodní zážitek v zemi.</div>
+    </div>
+    <div class="full-team-grid reveal">
+      <div class="team-card-full"><div class="team-ava-lg">👨‍💻</div><div class="team-name-lg">David Vajt</div><div class="team-role-lg">Race &amp; Media Manager</div><div class="team-bio">Organizace závodů, live streaming, sociální sítě. Pilot od 2019.</div></div>
+      <div class="team-card-full"><div class="team-ava-lg">🎛</div><div class="team-name-lg">Jiří Šimek</div><div class="team-role-lg">Lead Timer Technician</div><div class="team-bio">Správa časomíry LapRF, výsledkový systém, tech podpora.</div></div>
+      <div class="team-card-full"><div class="team-ava-lg">🔧</div><div class="team-name-lg">Jakub Folberger</div><div class="team-role-lg">General Technician</div><div class="team-bio">Příprava tratě, technická kontrola dronů, pit lane podpora.</div></div>
+      <div class="team-card-full"><div class="team-ava-lg">🎵</div><div class="team-name-lg">Petr Tenčík</div><div class="team-role-lg">Event Soundmaster</div><div class="team-bio">Zvuková technika, komentování live přenosů, atmosféra eventu.</div></div>
+      <div class="team-card-full"><div class="team-ava-lg">🏁</div><div class="team-name-lg">Daniel Habánák</div><div class="team-role-lg">Lap Timer &amp; Marshal</div><div class="team-bio">Obsluha laptimerů, marshal na trati, koordinace jízd.</div></div>
+      <div class="team-card-full"><div class="team-ava-lg">⚙</div><div class="team-name-lg">Tobiáš Kopečka</div><div class="team-role-lg">General Technician</div><div class="team-bio">Stavba tratě, logistika vybavení, servis dronů na místě.</div></div>
+      <div class="join-card">
+        <div><h3>Hledáme posilu</h3><p>Zkušenosti s organizací, videem, fotografií nebo technikou? Ozvij se na info@whoopleague.cz</p></div>
+        <button class="btn btn-cyan" onclick="window.open('mailto:info@whoopleague.cz')">Ozvat se →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: PRAVIDLA
+══════════════════════════════════════ -->
+<div class="page" id="page-pravidla">
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-glow" style="background:rgba(255,0,128,.06)"></div>
+    <div class="page-hero-content">
+      <p class="page-eyebrow">Czech Whoop League · Sezóna 2026</p>
+      <h1 class="page-title">Pravidla<br><em>soutěže</em></h1>
+      <p class="page-desc">Závazná pravidla Czech Whoop League. Účastí na závodu každý pilot potvrzuje, že se s těmito pravidly seznámil a bude je dodržovat.</p>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- Quick stats -->
+    <div class="season-overview reveal" style="margin-bottom:56px">
+      <div class="overview-stat"><div class="overview-num">1S</div><div class="overview-lbl">Třída dronů</div></div>
+      <div class="overview-stat"><div class="overview-num">25 mW</div><div class="overview-lbl">Max. výkon VTX</div></div>
+      <div class="overview-stat"><div class="overview-num">4×</div><div class="overview-lbl">Nejlepší výsledky do ligy</div></div>
+      <div class="overview-stat"><div class="overview-num">200 b.</div><div class="overview-lbl">Max. bodů za závod</div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 1. Úvod -->
+    <div class="sec-label reveal">01 · Úvod</div>
+    <div class="start-steps reveal" style="margin-bottom:48px">
+      <div class="start-step" style="grid-template-columns:80px 1fr">
+        <div class="step-big-n" style="padding-top:8px">1</div>
+        <div class="step-content">
+          <div class="step-title-big">O soutěži</div>
+          <div class="step-body">Czech Whoop League jsou komunitní závody malých FPV dronů (Tiny Whoop) v uzavřených prostorách. Akce se konají v <strong style="color:var(--cyan)">indoor prostředí</strong> mimo legislativu ÚCL. Piloti mladší <strong style="color:var(--cyan)">15 let</strong> se mohou účastnit pouze v doprovodu dospělé osoby.</div>
+          <div class="step-tags"><span class="step-tag">Indoor · uzavřené prostory</span><span class="step-tag">Mimo legislativu ÚCL</span><span class="step-tag">15+ nebo doprovod</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 2. Technické požadavky -->
+    <div class="sec-label reveal">02 · Technické požadavky</div>
+    <div class="start-steps reveal" style="margin-bottom:48px">
+      <div class="start-step" style="grid-template-columns:80px 1fr">
+        <div class="step-big-n" style="padding-top:8px">2.1</div>
+        <div class="step-content">
+          <div class="step-title-big">Dron — Tiny Whoop 1S</div>
+          <div class="step-body">Závody jsou určeny pro FPV drony kategorie <strong style="color:var(--cyan)">Tiny Whoop s napájením z 1S baterie</strong>. Hmotnost není omezena, dron musí splňovat bezpečnostní požadavky indoor provozu a mít <strong style="color:var(--cyan)">zakryté vrtule</strong>. Povoleny jsou brushed i brushless motory.</div>
+          <div class="step-tags"><span class="step-tag">1S LiPo / LiHV</span><span class="step-tag">Max. napětí: 4,35 V</span><span class="step-tag">Zakryté vrtule povinné</span><span class="step-tag">Pouze plastové vrtule</span></div>
+        </div>
+      </div>
+      <div class="start-step" style="grid-template-columns:80px 1fr">
+        <div class="step-big-n" style="padding-top:8px">2.2</div>
+        <div class="step-content">
+          <div class="step-title-big">Video systém</div>
+          <div class="step-body">Povoleny jsou systémy: <strong style="color:var(--cyan)">Analog 5,8 GHz</strong>, <strong style="color:var(--cyan)">HDZero</strong>, <strong style="color:var(--cyan)">DJI v race módu</strong>. Digitální systémy Walksnail nejsou podporovány (nekompatibilita s časomírou). Maximální výkon vysílače je <strong style="color:var(--pink)">25 mW</strong>. VTX smí být zapnut <strong style="color:var(--pink)">pouze se souhlasem letového ředitele</strong> — porušení může vést k diskvalifikaci.</div>
+          <div class="step-tags"><span class="step-tag">Analog 5,8 GHz ✓</span><span class="step-tag">HDZero ✓</span><span class="step-tag">DJI race mode ✓</span><span class="step-tag">Walksnail ✗</span><span class="step-tag">Max: 25 mW</span></div>
+        </div>
+      </div>
+      <div class="start-step" style="grid-template-columns:80px 1fr">
+        <div class="step-big-n" style="padding-top:8px">2.3</div>
+        <div class="step-content">
+          <div class="step-title-big">RC systém &amp; Failsafe</div>
+          <div class="step-body">Povolen je jakýkoliv RC systém (ELRS, FrSky, Crossfire…). Podmínkou je aktivní <strong style="color:var(--cyan)">failsafe</strong>, který při ztrátě signálu okamžitě zastaví motory. Letový ředitel failsafe kontroluje při technické přejímce.</div>
+          <div class="step-tags"><span class="step-tag">ELRS / FrSky / Crossfire…</span><span class="step-tag">Failsafe: motors off — POVINNÝ</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 3. Organizace -->
+    <div class="sec-label reveal">03 · Organizace závodu</div>
+    <div class="rules-grid reveal" style="margin-bottom:48px">
+      <div class="rule-card">
+        <div class="rule-n">3.1</div>
+        <div class="rule-title">Letový ředitel</div>
+        <div class="rule-body">Letový ředitel rozhoduje o průběhu závodu, řeší protesty a může závod přerušit. <strong style="color:var(--pink)">Jeho pokyny jsou závazné.</strong> Výsledky závodního kola lze napadnout pouze bezprostředně po jeho skončení.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">3.2</div>
+        <div class="rule-title">Technická přejímka</div>
+        <div class="rule-body">Před závodem pilot předloží všechny drony k technické kontrole. Letový ředitel ověří funkčnost failsafe a výkon VTX. Dron bez schválení nesmí létat.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">3.3</div>
+        <div class="rule-title">Spotteři</div>
+        <div class="rule-body">Každý pilot má přiděleného spottera (obvykle pilot z další letové skupiny). Spotter sleduje let a potvrzuje průlet branek. V případě nejasností rozhoduje letový ředitel po kontrole záznamu.</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 4. Průběh závodu -->
+    <div class="sec-label reveal">04 · Průběh závodu</div>
+    <div class="rules-grid reveal" style="margin-bottom:48px">
+      <div class="rule-card">
+        <div class="rule-n">4.1</div>
+        <div class="rule-title">Skupiny</div>
+        <div class="rule-body">Piloti létají ve skupinách po čtyřech. Počet skupin určuje organizátor podle celkového počtu účastníků.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">4.2</div>
+        <div class="rule-title">Trénink</div>
+        <div class="rule-body">Před závodem proběhnou tréninky — časy se měří, ale nezapočítávají do výsledků. Cílem je ověřit video přenos a naučit se trať.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">4.3</div>
+        <div class="rule-title">Kvalifikace</div>
+        <div class="rule-body">Každý pilot absolvuje několik kvalifikačních letů. Cílem je uletět co nejvíce kol v časovém limitu (60–90 s). Po vypršení limitu lze dokončit rozjeté kolo. <strong style="color:var(--cyan)">Výsledek = součet 3 nejlepších po sobě jdoucích letů.</strong></div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-n">4.4</div>
+        <div class="rule-title">Finálové lety</div>
+        <div class="rule-body">Do finálových letů postupuje nejlepších 16 nebo 32 pilotů. Formát: <strong style="color:var(--cyan)">double elimination</strong>, skupiny po 4. Start je synchronizován zvukovým signálem laptimeru. <strong style="color:var(--pink)">Předčasný start = diskvalifikace z kola.</strong></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 5. Bodování -->
+    <div class="sec-label reveal">05 · Bodování ligy</div>
+    <div class="reveal" style="margin-bottom:48px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:rgba(0,170,255,.04);margin-bottom:24px">
+        <div style="background:var(--bg);padding:28px 32px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.15em;color:rgba(0,170,255,.5);margin-bottom:16px">UMÍSTĚNÍ → BODY</div>
+          <table style="width:100%;border-collapse:collapse;font-family:'Share Tech Mono',monospace;font-size:13px">
+            <tr style="border-bottom:1px solid rgba(0,170,255,.08)"><td style="padding:8px 0;color:var(--yellow);font-weight:700">1. místo</td><td style="text-align:right;color:var(--yellow);font-size:20px;font-family:'Orbitron',sans-serif">200</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.08)"><td style="padding:8px 0;color:#ccc">2. místo</td><td style="text-align:right;color:#ccc">194</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.08)"><td style="padding:8px 0;color:#c07030">3. místo</td><td style="text-align:right;color:#c07030">187</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.5)">4. místo</td><td style="text-align:right;color:rgba(255,255,255,.5)">181</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.5)">5. místo</td><td style="text-align:right;color:rgba(255,255,255,.5)">155</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.5)">6. místo</td><td style="text-align:right;color:rgba(255,255,255,.5)">142</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.4)">7. místo</td><td style="text-align:right;color:rgba(255,255,255,.4)">129</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.4)">8. místo</td><td style="text-align:right;color:rgba(255,255,255,.4)">116</td></tr>
+          </table>
+        </div>
+        <div style="background:var(--bg);padding:28px 32px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.15em;color:rgba(0,170,255,.5);margin-bottom:16px">UMÍSTĚNÍ → BODY</div>
+          <table style="width:100%;border-collapse:collapse;font-family:'Share Tech Mono',monospace;font-size:13px">
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.4)">9. místo</td><td style="text-align:right;color:rgba(255,255,255,.4)">103</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.35)">10. místo</td><td style="text-align:right;color:rgba(255,255,255,.35)">90</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.3)">11. místo</td><td style="text-align:right;color:rgba(255,255,255,.3)">78</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.3)">12. místo</td><td style="text-align:right;color:rgba(255,255,255,.3)">65</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.25)">13. místo</td><td style="text-align:right;color:rgba(255,255,255,.25)">52</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.25)">14. místo</td><td style="text-align:right;color:rgba(255,255,255,.25)">39</td></tr>
+            <tr style="border-bottom:1px solid rgba(0,170,255,.06)"><td style="padding:7px 0;color:rgba(255,255,255,.2)">15. místo</td><td style="text-align:right;color:rgba(255,255,255,.2)">26</td></tr>
+            <tr><td style="padding:7px 0;color:rgba(255,255,255,.2)">16. místo</td><td style="text-align:right;color:rgba(255,255,255,.2)">13</td></tr>
+          </table>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <div style="background:rgba(255,230,0,.04);border:1px solid rgba(255,230,0,.2);padding:20px 28px;flex:1;min-width:200px">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.15em;color:rgba(255,230,0,.5);margin-bottom:6px">BONUS</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--yellow)">+50 bodů</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.4);margin-top:4px">Nejlepší výsledek v kvalifikaci</div>
+        </div>
+        <div style="background:rgba(0,170,255,.04);border:1px solid rgba(0,170,255,.15);padding:20px 28px;flex:1;min-width:200px">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.15em;color:rgba(0,170,255,.5);margin-bottom:6px">SEZÓNA</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--cyan)">4 závody</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.4);margin-top:4px">Počítají se 4 nejlepší výsledky z celé sezóny</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 6. Bezpečnost -->
+    <div class="sec-label reveal">06 · Bezpečnostní pokyny</div>
+    <div class="rules-grid reveal" style="margin-bottom:48px">
+      <div class="rule-card" style="border-top-color:var(--pink)"><div class="rule-n" style="color:rgba(255,0,128,.08)">!</div><div class="rule-title" style="color:var(--pink)">Zapnutí dronu</div><div class="rule-body">Dron smí být zapnut <strong style="color:var(--pink)">pouze na pokyn letového ředitele</strong>. VTX nesmí vysílat bez povolení.</div></div>
+      <div class="rule-card" style="border-top-color:var(--pink)"><div class="rule-n" style="color:rgba(255,0,128,.08)">!</div><div class="rule-title" style="color:var(--pink)">Vstup na trať</div><div class="rule-body">Je zakázáno vstupovat na trať <strong style="color:var(--pink)">bez souhlasu organizátora</strong> — ani pro sbírání havarovaného dronu.</div></div>
+      <div class="rule-card" style="border-top-color:var(--pink)"><div class="rule-n" style="color:rgba(255,0,128,.08)">!</div><div class="rule-title" style="color:var(--pink)">Ztráta kontroly</div><div class="rule-body">Pilot, který ztratí kontrolu nad dronem, musí <strong style="color:var(--pink)">okamžitě vypnout motory</strong>. Bezpečnost má vždy přednost před výsledkem.</div></div>
+      <div class="rule-card"><div class="rule-n">6</div><div class="rule-title">Létání v trati</div><div class="rule-body">Létání je povoleno pouze v určené trati a výšce nutné pro průlet překážkami. Zkratky nebo opuštění tratě = diskvalifikace kola.</div></div>
+      <div class="rule-card"><div class="rule-n">6</div><div class="rule-title">Zákaz návykových látek</div><div class="rule-body">Požívání alkoholu nebo jiných návykových látek je přísně zakázáno. Pilot pod vlivem bude ze závodu vyloučen.</div></div>
+      <div class="rule-card"><div class="rule-n">6</div><div class="rule-title">Odpovědnost</div><div class="rule-body">Každý pilot je odpovědný za své chování a případné škody způsobené dronem. Porušení bezpečnostních pravidel může vést k trvalému vyloučení z ligy.</div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 7. Etický kodex -->
+    <div class="sec-label reveal">07 · Etický kodex</div>
+    <div class="reveal" style="background:rgba(0,170,255,.03);border:1px solid rgba(0,170,255,.1);padding:48px;margin-bottom:48px;position:relative;overflow:hidden">
+      <div style="position:absolute;right:32px;top:24px;font-family:'Orbitron',sans-serif;font-size:80px;font-weight:900;color:rgba(0,170,255,.03);line-height:1">CWL</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.04em;color:var(--white);margin-bottom:20px">Fair play &amp; komunita</div>
+      <p style="font-size:15px;line-height:1.9;color:rgba(255,255,255,.5);max-width:680px;margin:0">
+        Piloti i organizátoři se chovají <strong style="color:var(--white)">čestně a s respektem</strong> k ostatním soutěžícím a divákům.
+        Czech Whoop League podporuje <strong style="color:var(--cyan)">přátelskou komunitní atmosféru</strong>, vzájemnou pomoc a sdílení zkušeností.
+        Cílem závodů je zábava, učení a propagace FPV sportu v České republice.
+        Jakékoliv chování poškozující komunitu nebo reputaci ligy může vést k trvalému vyloučení.
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div class="reveal" style="background:rgba(0,170,255,.04);border:1px solid rgba(0,170,255,.12);padding:40px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap">
+      <div>
+        <div class="sec-label" style="margin-bottom:8px">Chceš závodit?</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.04em;color:var(--white)">Podívej se na nejbližší závod</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.4);margin-top:6px">Registrace otevírají 2 týdny před závodem přes Facebook</div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a onclick="showPage('zavody');return false;" class="cta-main" style="cursor:pointer">Závody 2026 →</a>
+        <a onclick="showPage('start');return false;" class="btn btn-ghost" style="cursor:pointer">Jak začít →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE: STORE
+══════════════════════════════════════ -->
+<div class="page" id="page-store">
+  <div class="store-hero-wrap">
+    <div class="store-hero-bg"></div>
+    <div class="store-hero-glow"></div>
+    <div class="store-hero-word">MERCH</div>
+    <div class="store-hero-inner">
+      <p class="page-eyebrow">Official CWL Merchandise · 2026</p>
+      <h1 class="page-title">CWL<br><em>Store</em></h1>
+      <p class="page-desc">Reprezentuj Czech Whoop League. Oblečení, doplňky, stickery — vše přímo od nás.</p>
+      <div class="free-ship">Doprava zdarma nad 1 500 Kč · Dodání 3–5 dní</div>
+    </div>
+  </div>
+
+  <div class="store-main">
+    <aside class="store-sidebar">
+      <div class="sb-title">Kategorie</div>
+      <div class="sb-cats">
+        <button class="sb-cat active" onclick="storeCat('all',this)">Vše <span class="sb-cnt">10</span></button>
+        <button class="sb-cat" onclick="storeCat('obleceni',this)">Oblečení <span class="sb-cnt">4</span></button>
+        <button class="sb-cat" onclick="storeCat('doplnky',this)">Doplňky <span class="sb-cnt">3</span></button>
+        <button class="sb-cat" onclick="storeCat('stickery',this)">Stickery <span class="sb-cnt">3</span></button>
+      </div>
+      <div class="sb-title">Max cena</div>
+      <input type="range" class="price-range" min="100" max="2000" value="2000" step="50" id="priceRange" oninput="storePrice(this.value)">
+      <div class="price-lbl"><span>100 Kč</span><span id="priceVal">2 000 Kč</span></div>
+    </aside>
+
+    <div class="store-products">
+      <div class="store-toolbar">
+        <div class="store-toolbar-info">Zobrazeno <span id="productCount">10</span> produktů</div>
+        <select class="store-sort" onchange="storeSort(this.value)">
+          <option value="default">Doporučené</option>
+          <option value="asc">Cena ↑</option>
+          <option value="desc">Cena ↓</option>
+        </select>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CART DRAWER ══ -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCartOverlay(event)">
+  <div class="cart-drawer">
+    <div class="cart-head">
+      <div class="cart-head-title">Košík <em>CWL</em></div>
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty"><div class="cart-empty-icon">🛒</div><div class="cart-empty-txt">Košík je prázdný</div></div>
+    </div>
+    <div class="cart-foot">
+      <div class="cart-subtotal">
+        <span class="cart-subtotal-lbl">Celkem</span>
+        <span class="cart-subtotal-val" id="cartTotal">0 Kč</span>
+      </div>
+      <div class="cart-note">✓ Doprava zdarma nad 1 500 Kč</div>
+      <button class="checkout-btn" onclick="checkout()">Pokračovat k platbě →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+// ══ RACE DATA ══
+// ══ STANDINGS DATA ══
+// Upravuj tady — automaticky se promítne do tabulky, SVG podia i community gridu
+const STANDINGS = [
+  { pos:1, name:'SPEEDY_CZ',   city:'Praha',   pts:340, races:'2/2', bestLap:'04.231s', trend:'+1', emoji:'🧑‍✈️' },
+  { pos:2, name:'WHOOPMASTER', city:'Brno',    pts:295, races:'2/2', bestLap:'04.388s', trend:'+2', emoji:'🎮' },
+  { pos:3, name:'FASTIK99',    city:'Ostrava', pts:280, races:'2/2', bestLap:'04.512s', trend:'-1', emoji:'🚀' },
+  { pos:4, name:'DRONEKING',   city:'Plzeň',   pts:245, races:'2/2', bestLap:'04.670s', trend:'+1', emoji:'⚡' },
+  { pos:5, name:'MICRO_FPV',   city:'Praha',   pts:210, races:'2/2', bestLap:'04.891s', trend:'-2', emoji:'🔧' },
+  { pos:6, name:'INDOORKING',  city:'Brno',    pts:190, races:'2/2', bestLap:'05.012s', trend:'=',  emoji:'🏁' },
+  { pos:7, name:'WHOOPCZECH',  city:'Liberec', pts:160, races:'2/2', bestLap:'05.234s', trend:'+3', emoji:'🎯' },
+  { pos:8, name:'TURBO_T',     city:'Olomouc', pts:140, races:'2/2', bestLap:'05.389s', trend:'-1', emoji:'💨' },
+];
+
+// ══ RACE RESULTS ══
+// Pro každý race.id sem přidej výsledky po odehrání
+const RACE_RESULTS = {
+  1: { raceName:'1. Ligový závod', date:'25. ledna 2026', loc:'Hostivice', pilots:32, podium:[
+    { pos:1, name:'SPEEDY_CZ',   time:'04.231s', pts:100 },
+    { pos:2, name:'WHOOPMASTER', time:'04.388s', pts:80  },
+    { pos:3, name:'FASTIK99',    time:'04.512s', pts:65  },
+  ]},
+  // přidej 2-6 po odehrání
+};
+
+const RACES = [
+  { id:1, date:'2026-01-25', name:'1. Ligový závod',   tag:'Race_01 · Ligový závod', loc:'Hostivice',      info:'1S Whoop · Indoor', pilots:'32 pilotů',  regOpen: null,         isFinal: false },
+  { id:2, date:'2026-02-28', name:'2. Ligový závod',   tag:'Race_02 · Ligový závod', loc:'Hostivice',      info:'1S Whoop · Indoor', pilots:'28 pilotů',  regOpen: null,         isFinal: false },
+  { id:3, date:'2026-03-28', name:'3. Ligový závod',   tag:'Race_03 · Ligový závod', loc:'Hostivice',      info:'1S Whoop · Indoor', pilots:null,          regOpen:'2026-03-14',  isFinal: false },
+  { id:4, date:'2026-04-25', name:'4. Ligový závod',   tag:'Race_04 · Ligový závod', loc:'Hostivice',      info:'1S Whoop · Indoor', pilots:null,          regOpen:'2026-04-11',  isFinal: false },
+  { id:5, date:'2026-05-30', name:'5. Ligový závod',   tag:'Race_05 · Ligový závod', loc:'Hostivice',      info:'1S Whoop · Indoor', pilots:null,          regOpen:'2026-05-16',  isFinal: false },
+  { id:6, date:'2026-06-27', name:'Sezónní finále 2026', tag:'Race_06 · Grand Final', loc:'TBA · Praha',   info:'Finálový závod 🏆', pilots:null,          regOpen:'2026-06-13',  isFinal: true  },
+];
+
+const MONTHS_CZ = ['Leden','Únor','Březen','Duben','Květen','Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec'];
+
+function getRaceStatus(race) {
+  const now = new Date();
+  const raceDate = new Date(race.date);
+  const regDate  = race.regOpen ? new Date(race.regOpen) : null;
+  // past = race day has passed
+  if (raceDate < now) return 'past';
+  // open = reg date has passed but race hasn't
+  if (regDate && regDate <= now) return 'open';
+  return 'soon';
+}
+
+let raceFilter = 'all';
+
+function setRaceFilter(filter, btn) {
+  raceFilter = filter;
+  document.querySelectorAll('.calendar-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderRaces();
+}
+
+function renderRaces() {
+  const now = new Date();
+
+  // find first upcoming race
+  const nextRace = RACES.find(r => new Date(r.date) >= now);
+
+  // apply filter
+  let filtered = RACES;
+  if (raceFilter === 'nadchazejici') filtered = RACES.filter(r => getRaceStatus(r) !== 'past');
+  if (raceFilter === 'odehrano')     filtered = RACES.filter(r => getRaceStatus(r) === 'past');
+
+  const html = filtered.map(race => {
+    const status = getRaceStatus(race);
+    const d = new Date(race.date);
+    const day   = d.getDate();
+    const month = MONTHS_CZ[d.getMonth()];
+    const year  = d.getFullYear();
+    const isNext = nextRace && race.id === nextRace.id;
+
+    const dayStyle = isNext ? `style="color:var(--yellow);text-shadow:0 0 16px rgba(255,230,0,.4)"` : '';
+
+    // status badge + action
+    let badgeHtml = '';
+    let actionHtml = '';
+
+    if (status === 'past') {
+      badgeHtml = `<span class="status-badge status-past">Odehráno</span>`;
+      actionHtml = `<button class="btn btn-ghost btn-sm" onclick="showPage('vysledky')">Výsledky →</button>`;
+    } else if (status === 'open') {
+      badgeHtml = `<span class="status-badge status-open">Registrace otevřena</span>`;
+      actionHtml = `<button class="btn btn-cyan btn-sm">Přihlásit →</button>`;
+    } else if (race.isFinal) {
+      badgeHtml = `<span class="status-badge" style="color:var(--pink);border-color:rgba(255,0,128,.3);background:rgba(255,0,128,.05)">Grand Final</span>`;
+      if (race.regOpen) actionHtml = `<span class="race-pilots">Reg. od ${new Date(race.regOpen).getDate()}. ${MONTHS_CZ[new Date(race.regOpen).getMonth()].slice(0,3).toLowerCase()}.</span>`;
+    } else {
+      badgeHtml = `<span class="status-badge status-soon">Brzy</span>`;
+      if (race.regOpen) actionHtml = `<span class="race-pilots">Reg. od ${new Date(race.regOpen).getDate()}. ${MONTHS_CZ[new Date(race.regOpen).getMonth()].slice(0,3).toLowerCase()}.</span>`;
+    }
+
+    const pilotsHtml = race.pilots ? `<span class="race-meta-item">👥 ${race.pilots}</span>` : '';
+    const itemClass  = `race-item${status === 'past' ? ' past' : ''}${isNext ? ' next' : ''}`;
+    const tagLabel   = isNext ? race.tag.replace('·', '· NEJBLIŽŠÍ ·') : race.tag;
+
+    return `
+      <div class="${itemClass}">
+        <div class="race-date-block">
+          <div class="race-day" ${dayStyle}>${day}</div>
+          <div class="race-month">${month}</div>
+          <div class="race-year">${year}</div>
+        </div>
+        <div class="race-info">
+          <div class="race-num-tag">${tagLabel}</div>
+          <div class="race-name-big">${race.name}</div>
+          <div class="race-meta-row">
+            <span class="race-meta-item">📍 ${race.loc}</span>
+            <span class="race-meta-item">⚡ ${race.info}</span>
+            ${pilotsHtml}
+          </div>
+        </div>
+        <div class="race-status">
+          ${badgeHtml}
+          ${actionHtml}
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('raceList').innerHTML = html;
+
+  // update season-overview counts dynamically
+  const past   = RACES.filter(r => getRaceStatus(r) === 'past').length;
+  const remain = RACES.length - past;
+  const ovEls = document.querySelectorAll('#page-zavody .overview-num');
+  if (ovEls[1]) ovEls[1].textContent = past;
+  if (ovEls[2]) ovEls[2].textContent = remain;
+}
+
+// ══ PRODUCTS DATA ══
+const PRODUCTS = [
+  { id:1,  cat:'obleceni', name:'CWL Racing Tee',        emoji:'👕', desc:'Prémiové tričko z organické bavlny. CWL logo + slogan na zádech.', price:690,  oldPrice:null, badge:'new',  sizes:['XS','S','M','L','XL','XXL'], oos:[] },
+  { id:2,  cat:'obleceni', name:'CWL Hoodie Premium',    emoji:'🧥', desc:'400g fleece mikina, CWL embroidery, zip kapsa. Unisex střih.',      price:1490, oldPrice:1890, badge:'sale', sizes:['S','M','L','XL','XXL'], oos:['XXL'] },
+  { id:3,  cat:'obleceni', name:'CWL Pilot Kšiltovka',   emoji:'🧢', desc:'6-panel snapback, výšivka CWL drone logo. Nastavitelný zápitek.',   price:590,  oldPrice:null, badge:'hot',  sizes:['ONE SIZE'], oos:[] },
+  { id:4,  cat:'obleceni', name:'CWL Zip Windbreaker',   emoji:'🫱', desc:'Lehká větrovka, water-resistant, full zip. Limitovaná edice.',      price:1890, oldPrice:null, badge:null,   sizes:['S','M','L','XL'], oos:[] },
+  { id:5,  cat:'doplnky',  name:'CWL Drone Patch Set',   emoji:'🎖', desc:'Sada 4 nažehlovacích nášivek — CWL logo, vlajka, drone, FPV.',     price:290,  oldPrice:null, badge:null,   sizes:['SET'], oos:[] },
+  { id:6,  cat:'doplnky',  name:'CWL Enamel Pin',        emoji:'📌', desc:'Tvrdá emailová brož, zlatý okraj, 30mm. Limitováno 200ks.',        price:190,  oldPrice:null, badge:null,   sizes:['ONE SIZE'], oos:[] },
+  { id:7,  cat:'doplnky',  name:'CWL Drone Bag',         emoji:'🎒', desc:'Nylonová taška, oddíly pro 4 drony + baterie. CWL logo.',          price:890,  oldPrice:null, badge:'new',  sizes:['ONE SIZE'], oos:[] },
+  { id:8,  cat:'stickery', name:'Sticker Pack Vol.1',    emoji:'🏷', desc:'10 vinylových samolepek, voděodolné. CWL logo, drone, slogany.',    price:149,  oldPrice:null, badge:'hot',  sizes:['PACK'], oos:[] },
+  { id:9,  cat:'stickery', name:'Holographic Sticker',   emoji:'✨', desc:'Holografická samolepka CWL drone logo 100×100mm. Duha efekt.',      price:89,   oldPrice:null, badge:null,   sizes:['ONE SIZE'], oos:[] },
+  { id:10, cat:'stickery', name:'Chrome Sticker Set',    emoji:'🔵', desc:'5 chromových samolepek, stříbrný mirror finish. Sezóna 2026.',      price:199,  oldPrice:null, badge:null,   sizes:['SET'], oos:[] },
+];
+
+let cart = [];
+let selSizes = {};
+let storeCatFilter = 'all';
+let storeSortVal = 'default';
+let storeMaxPrice = 2000;
+
+// ══ STORE RENDER ══
+function renderStore() {
+  let prods = [...PRODUCTS];
+  if (storeCatFilter !== 'all') prods = prods.filter(p => p.cat === storeCatFilter);
+  prods = prods.filter(p => p.price <= storeMaxPrice);
+  if (storeSortVal === 'asc')  prods.sort((a,b) => a.price - b.price);
+  if (storeSortVal === 'desc') prods.sort((a,b) => b.price - a.price);
+  document.getElementById('productCount').textContent = prods.length;
+  const grid = document.getElementById('productGrid');
+  if (!prods.length) { grid.innerHTML = '<div style="grid-column:span 3;padding:60px;text-align:center;font-family:\'Share Tech Mono\',monospace;font-size:11px;color:rgba(0,170,255,.25);letter-spacing:.2em">// ŽÁDNÉ PRODUKTY</div>'; return; }
+  grid.innerHTML = prods.map(p => {
+    const sz = selSizes[p.id] || p.sizes[0];
+    const badges = { new:'NEW', hot:'HOT🔥', sale:'SALE' };
+    const bHtml = p.badge ? `<span class="p-badge p-badge-${p.badge}">${badges[p.badge]}</span>` : '';
+    const oldHtml = p.oldPrice ? `<span class="p-price-old">${p.oldPrice} Kč</span>` : '';
+    const szHtml = p.sizes.length > 1 && !['SET','PACK','DIGITAL'].includes(p.sizes[0]) ? `
+      <div class="p-sizes">${p.sizes.map(s => `<span class="p-sz ${sz===s?'sel':''} ${p.oos.includes(s)?'oos':''}" onclick="pickSize(${p.id},'${s}',this)">${s}</span>`).join('')}</div>` : '';
+    return `<div class="product-card" id="pc-${p.id}">
+      <div class="p-img">${bHtml}${p.emoji}</div>
+      <div class="p-body">
+        <div class="p-cat">${{obleceni:'Oblečení',doplnky:'Doplňky',stickery:'Stickery'}[p.cat]}</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-desc">${p.desc}</div>
+        ${szHtml}
+        <div class="p-footer">
+          <div><div class="p-price">${p.price} Kč</div>${oldHtml}</div>
+          <button class="add-btn" id="add-${p.id}" onclick="addToCart(${p.id})">+ Přidat</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function pickSize(id, s, el) {
+  selSizes[id] = s;
+  document.querySelectorAll(`#pc-${id} .p-sz`).forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function storeCat(cat, btn) {
+  storeCatFilter = cat;
+  document.querySelectorAll('.sb-cat').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderStore();
+}
+
+function storeSort(val) { storeSortVal = val; renderStore(); }
+
+function storePrice(val) {
+  storeMaxPrice = parseInt(val);
+  document.getElementById('priceVal').textContent = parseInt(val).toLocaleString('cs-CZ') + ' Kč';
+  renderStore();
+}
+
+// ══ CART ══
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  const size = selSizes[id] || p.sizes[0];
+  const key = id + '-' + size;
+  const ex = cart.find(c => c.key === key);
+  if (ex) ex.qty++;
+  else cart.push({ key, id, name: p.name, emoji: p.emoji, price: p.price, size, qty: 1 });
+  updateCart();
+  showToast(`${p.emoji} ${p.name} přidán!`);
+  const btn = document.getElementById('add-' + id);
+  if (btn) { btn.textContent = '✓ Přidáno'; btn.classList.add('added'); setTimeout(() => { btn.textContent = '+ Přidat'; btn.classList.remove('added'); }, 1500); }
+}
+
+function updateCart() {
+  const total = cart.reduce((s,c) => s + c.price * c.qty, 0);
+  const count = cart.reduce((s,c) => s + c.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = count;
+  badge.classList.add('bump');
+  setTimeout(() => badge.classList.remove('bump'), 300);
+  document.getElementById('cartTotal').textContent = total.toLocaleString('cs-CZ') + ' Kč';
+  const el = document.getElementById('cartItems');
+  if (!cart.length) { el.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><div class="cart-empty-txt">Košík je prázdný</div></div>'; return; }
+  el.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-sz">${item.size}</div>
+        <div class="cart-item-price">${(item.price * item.qty).toLocaleString('cs-CZ')} Kč</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty('${item.key}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.key}',1)">+</button>
+        </div>
+      </div>
+      <button class="cart-item-rm" onclick="removeItem('${item.key}')">✕</button>
+    </div>`).join('');
+}
+
+function changeQty(key, d) { const i = cart.find(c => c.key === key); if (!i) return; i.qty += d; if (i.qty <= 0) removeItem(key, true); else updateCart(); }
+function removeItem(key, s) { cart = cart.filter(c => c.key !== key); updateCart(); if (!s) showToast('Produkt odebrán'); }
+function openCart() { document.getElementById('cartOverlay').classList.add('open'); }
+function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); }
+function closeCartOverlay(e) { if (e.target === document.getElementById('cartOverlay')) closeCart(); }
+function checkout() {
+  if (!cart.length) { showToast('Košík je prázdný!'); return; }
+  alert('Demo: Zde by proběhlo napojení na platební bránu (Stripe / ComGate).\n\n' + cart.map(c => `• ${c.name} (${c.size}) × ${c.qty} = ${(c.price*c.qty).toLocaleString('cs-CZ')} Kč`).join('\n') + '\n\nCelkem: ' + cart.reduce((s,c)=>s+c.price*c.qty,0).toLocaleString('cs-CZ') + ' Kč');
+}
+
+// ══ HAMBURGER ══
+function toggleMobileNav() {
+  const nav = document.getElementById('mobileNav');
+  const btn = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+
+// ══ PAGE ROUTING ══
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) { page.classList.add('active'); window.scrollTo(0, 0); }
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  if (id === 'store') renderStore();
+  if (id === 'zavody') renderRaces();
+  if (id === 'vysledky') { renderStandings(); renderResults(); }
+  setTimeout(() => {
+    document.querySelectorAll('#page-' + id + ' .reveal').forEach(el => el.classList.add('in'));
+  }, 50);
+}
+
+function switchTab(btn, panelId) {
+  document.querySelectorAll('.rtab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.results-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+// filter btns wired via onclick in HTML
+
+// homepage nav links — map old anchor hrefs to pages
+document.querySelectorAll('a[href="#zavody"]').forEach(a => { a.href='#'; a.onclick = () => { showPage('zavody'); return false; }; });
+document.querySelectorAll('a[href="#liga"]').forEach(a => { a.href='#'; a.onclick = () => { showPage('vysledky'); return false; }; });
+document.querySelectorAll('a[href="#trening"]').forEach(a => { a.href='#'; a.onclick = () => { showPage('start'); return false; }; });
+document.querySelectorAll('a[href="#tym"]').forEach(a => { a.href='#'; a.onclick = () => { showPage('tym'); return false; }; });
+document.querySelectorAll('a[href="#kontakt"]').forEach(a => { a.href='#'; a.onclick = () => { showPage('home'); return false; }; });
+document.querySelectorAll('.link-all').forEach(a => { a.href='#'; a.onclick = () => { showPage('zavody'); return false; }; });
+
+// ══ TOAST ══
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ══ SCROLL REVEAL ══
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ══ CURSOR TRAIL ══
+const trail = [];
+for (let i = 0; i < 8; i++) {
+  const dot = document.createElement('div');
+  dot.style.cssText = `position:fixed;width:${4 - i*0.3}px;height:${4 - i*0.3}px;border-radius:50%;background:rgba(0,255,238,${0.6 - i*0.07});pointer-events:none;z-index:9998;transition:opacity 0.3s;transform:translate(-50%,-50%)`;
+  document.body.appendChild(dot);
+  trail.push({ el: dot, x: 0, y: 0 });
+}
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animate() {
+  trail.forEach((t, i) => {
+    const prev = i === 0 ? { x: mx, y: my } : trail[i - 1];
+    t.x += (prev.x - t.x) * 0.35;
+    t.y += (prev.y - t.y) * 0.35;
+    t.el.style.left = t.x + 'px';
+    t.el.style.top  = t.y + 'px';
+  });
+  requestAnimationFrame(animate);
+})();
+
+// ══ RANDOM GLITCH ══
+const line2 = document.querySelector('.line-2');
+if (line2) {
+  setInterval(() => {
+    line2.style.textShadow = `${(Math.random()-0.5)*8}px 0 #FF0080, ${(Math.random()-0.5)*8}px 0 #00FFEE`;
+    setTimeout(() => { line2.style.textShadow = ''; }, 150);
+  }, 2000);
+}
+
+// Init homepage reveals
+setTimeout(() => {
+  document.querySelectorAll('#page-home .reveal').forEach(el => el.classList.add('in'));
+}, 100);
+
+// ══ RENDER STANDINGS ══
+function renderStandings() {
+  const tbody = document.getElementById('standingsBody');
+  if (!tbody) return;
+  tbody.innerHTML = STANDINGS.map(p => {
+    const posClass = p.pos===1?'pos-gold':p.pos===2?'pos-silver':p.pos===3?'pos-bronze':'';
+    const avaClass = p.pos===1?'gold-av':'';
+    const trendHtml = p.trend==='='
+      ? `<span style="color:rgba(255,255,255,.4);font-size:11px">–</span>`
+      : p.trend.startsWith('+')
+        ? `<span class="trend-up">▲ ${p.trend.slice(1)}</span>`
+        : `<span class="trend-dn">▼ ${p.trend.slice(1)}</span>`;
+    return `<tr>
+      <td><div class="pos-num ${posClass}">${String(p.pos).padStart(2,'0')}</div></td>
+      <td><div class="pilot-cell"><div class="pilot-ava ${avaClass}">${p.emoji}</div><div><div class="pilot-name-big">${p.name}</div><div class="pilot-city">${p.city}</div></div></div></td>
+      <td><div class="pts-cell">${p.pts}</div></td>
+      <td><div class="time-cell">${p.races}</div></td>
+      <td><div class="time-cell">${p.bestLap}</div></td>
+      <td>${trendHtml}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ══ RENDER RESULTS ══
+function renderResults() {
+  const el = document.getElementById('resultsBody');
+  if (!el) return;
+  const pastRaces = RACES.filter(r => getRaceStatus(r) === 'past');
+  if (!pastRaces.length) {
+    el.innerHTML = `<div style="padding:40px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,170,255,.25);letter-spacing:.2em">// SEZÓNA TEPRVE ZAČÍNÁ</div>`;
+    return;
+  }
+  const medals = ['🥇','🥈','🥉'];
+  const pClasses = ['p1','p2','p3'];
+  el.innerHTML = pastRaces.map(race => {
+    const res = RACE_RESULTS[race.id];
+    if (!res) return `<div class="result-card reveal">
+      <div class="result-race-tag">${race.tag} · ${race.loc}</div>
+      <div class="result-race-name">${race.name} — výsledky se připravují</div>
+    </div>`;
+    return `<div class="result-card reveal">
+      <div class="result-race-tag">Race_0${race.id} · ${res.date} · ${res.loc}</div>
+      <div class="result-race-name">${res.raceName} — Výsledky</div>
+      <div class="result-podium">
+        ${res.podium.map((p,i) => `<div class="result-p-item ${pClasses[i]}">
+          <span class="result-p-pos">${medals[i]} ${i+1}. místo</span>
+          <div class="result-p-name">${p.name}</div>
+          <div class="result-p-time">${p.time} · ${p.pts} bodů</div>
+        </div>`).join('')}
+      </div>
+      <div style="margin-top:16px">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(0,170,255,.4)">${res.pilots} pilotů · Indoor · ${res.loc}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══ RENDER COMMUNITY PODIUM SVG ══
+function renderCommunityPodium() {
+  const el = document.getElementById('commPodium');
+  if (!el) return;
+  const latestKey = Object.keys(RACE_RESULTS).map(Number).sort((a,b)=>b-a)[0];
+  const latestResult = latestKey ? RACE_RESULTS[latestKey] : null;
+  const podiumData = latestResult ? latestResult.podium : STANDINGS.slice(0,3).map(p=>({pos:p.pos,name:p.name,time:p.bestLap}));
+  if (!podiumData || !podiumData[0]) return;
+  // order: 2nd left, 1st center, 3rd right
+  const order = [podiumData[1]||{name:'—',time:''}, podiumData[0], podiumData[2]||{name:'—',time:''}];
+  const colors = ['#aaa','#FFE600','#c07030'];
+  const heights = [55,80,40];
+  const yTops = [120,95,135];
+  const xCenters = [90,150,210];
+  el.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs><radialGradient id="goldGc" cx="50%" cy="0%" r="80%"><stop offset="0%" stop-color="#FFE600" stop-opacity="0.2"/><stop offset="100%" stop-color="#FFE600" stop-opacity="0"/></radialGradient></defs>
+    <rect x="0" y="0" width="300" height="200" fill="url(#goldGc)"/>
+    ${[0,1,2].map(i => {
+      const d = order[i]; const col = colors[i];
+      const xc = xCenters[i]; const yTop = yTops[i]; const h = heights[i];
+      const posLabel = i===1?'1':i===0?'2':'3';
+      const fillOp = i===1?'0.1':'0.05'; const strokeOp = i===1?'0.4':'0.2';
+      return `<rect x="${xc-30}" y="${yTop}" width="60" height="${h}" fill="${col}" fill-opacity="${fillOp}" stroke="${col}" stroke-opacity="${strokeOp}" stroke-width="1"/>
+      <text x="${xc}" y="${yTop+h/2+4}" font-family="'Orbitron',sans-serif" font-size="${i===1?11:9}" fill="${col}" text-anchor="middle" opacity="${i===1?0.9:0.7}">${posLabel}</text>
+      <text x="${xc}" y="${yTop-5}" font-family="'Orbitron',sans-serif" font-size="6" fill="${col}" text-anchor="middle" opacity="${i===1?0.85:0.55}">${d.name}</text>
+      ${d.time?`<text x="${xc}" y="${yTop-13}" font-family="monospace" font-size="5" fill="${col}" text-anchor="middle" opacity="0.35">${d.time}</text>`:''}`;
+    }).join('')}
+    <circle cx="150" cy="55" r="24" fill="#FFE600" fill-opacity="0.05"/>
+    <path d="M143,43 L157,43 L160,53 Q155,60 150,61 Q145,60 140,53 Z" fill="none" stroke="#FFE600" stroke-width="1.2" stroke-opacity="0.7"/>
+    <line x1="150" y1="61" x2="150" y2="67" stroke="#FFE600" stroke-width="1.2" stroke-opacity="0.6"/>
+    <line x1="144" y1="67" x2="156" y2="67" stroke="#FFE600" stroke-width="1.5" stroke-opacity="0.6"/>
+    <circle cx="120" cy="35" r="1.5" fill="#FFE600" opacity="0.6"><animate attributeName="opacity" values="0.6;0.1;0.6" dur="2.1s" repeatCount="indefinite"/></circle>
+    <circle cx="185" cy="30" r="1" fill="#FFE600" opacity="0.5"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="1.7s" repeatCount="indefinite"/></circle>
+  </svg>
+  <span class="corner-label">${latestResult?latestResult.raceName.toUpperCase()+' · PODIUM':'SEZÓNA · TOP 3'}</span>`;
+}
+
+// ══ RENDER COMMUNITY PILOTS SVG ══
+function renderCommunityPilots() {
+  const el = document.getElementById('commPilots');
+  if (!el || !STANDINGS.length) return;
+  const top3 = STANDINGS.slice(0,3);
+  const rest  = STANDINGS.slice(3,7);
+  el.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs><radialGradient id="pGlowC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00AAFF" stop-opacity="0.15"/><stop offset="100%" stop-color="#00AAFF" stop-opacity="0"/></radialGradient></defs>
+    ${top3.map((p,i) => {
+      const x=[55,150,245][i];
+      const isFirst=i===0;
+      const col=isFirst?'#00FFEE':'#00AAFF';
+      return `<rect x="${x-35}" y="30" width="70" height="55" rx="2" fill="#00AAFF" fill-opacity="${isFirst?.05:.04}" stroke="${col}" stroke-width="1" stroke-opacity="${isFirst?.4:.2}"/>
+      ${isFirst?`<rect x="${x-35}" y="30" width="70" height="2" fill="#00FFEE" fill-opacity="0.5"/>`:''}
+      <text x="${x}" y="57" font-size="14" text-anchor="middle">${p.emoji}</text>
+      <text x="${x}" y="75" font-family="monospace" font-size="6" fill="${isFirst?'#00FFEE':'#aaa'}" text-anchor="middle" opacity="${isFirst?.85:.7}">${p.name}</text>
+      <text x="${x}" y="83" font-family="monospace" font-size="5" fill="#00AAFF" text-anchor="middle" opacity="0.4">${p.pts} pts · ${p.city}</text>`;
+    }).join('')}
+    ${rest.map((p,i) => {
+      const x=[47,117,187,255][i];
+      return `<rect x="${x-30}" y="105" width="58" height="50" rx="2" fill="#00AAFF" fill-opacity="0.03" stroke="#00AAFF" stroke-width="0.8" stroke-opacity="0.15"/>
+      <text x="${x}" y="128" font-size="11" text-anchor="middle">${p.emoji}</text>
+      <text x="${x}" y="141" font-family="monospace" font-size="6" fill="#888" text-anchor="middle" opacity="0.6">${p.name}</text>
+      <text x="${x}" y="149" font-family="monospace" font-size="5" fill="#00AAFF" text-anchor="middle" opacity="0.35">${p.pts} pts</text>`;
+    }).join('')}
+    ${STANDINGS.length>7?`<text x="150" y="192" font-family="monospace" font-size="6" fill="#00AAFF" text-anchor="middle" opacity="0.3">+${STANDINGS.length-7} dalších pilotů</text>`:''}
+    <rect x="0" y="0" width="300" height="200" fill="url(#pGlowC)"/>
+  </svg>
+  <span class="corner-label">SEZÓNA 2026 · ${STANDINGS.length} PILOTS</span>`;
+}
+
+// Init races
+renderRaces();
+renderStandings();
+renderResults();
+renderCommunityPodium();
+renderCommunityPilots();
+</script>
+
+<!-- ── FOOTER ── -->
+<footer id="kontakt">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-name">C<span>W</span>L</div>
+        <p>Oficiální česká liga pro závody a tréninky 1s FPV dronů. Malé drony. Velké zážitky. Praha, 2026.</p>
+        <p style="margin-top:12px;font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,170,255,0.4);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b22252d240b3c2324243b272e2a2c3e2e652831">[email&#160;protected]</a></p>
+      </div>
+      <div class="footer-col">
+        <h4>Liga</h4>
+        <ul>
+          <li><a onclick="showPage('zavody')" style="cursor:pointer">Závody 2026</a></li>
+          <li><a onclick="showPage('vysledky')" style="cursor:pointer">Výsledky &amp; tabulka</a></li>
+          <li><a onclick="showPage('start')" style="cursor:pointer">Jak začít</a></li>
+          <li><a onclick="showPage('pravidla')" style="cursor:pointer">Pravidla soutěže</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>O nás</h4>
+        <ul>
+          <li><a onclick="showPage('tym')" style="cursor:pointer">Náš tým</a></li>
+          <li><a href="mailto:info@whoopleague.cz">Kontakt</a></li>
+          <li><a href="https://facebook.com/whoopleague" target="_blank">Facebook</a></li>
+          <li><a href="https://instagram.com/cwl.czech" target="_blank">Instagram</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informace</h4>
+        <ul>
+          <li><a onclick="showPage('pravidla')" style="cursor:pointer">Pravidla &amp; podmínky</a></li>
+          <li><a href="mailto:info@whoopleague.cz">Přihlášení pilotů</a></li>
+          <li><a onclick="showPage('store')" style="cursor:pointer">Merch &amp; store</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 WHOOPLEAGUE.CZ · CZECH WHOOP LEAGUE · ALL RIGHTS RESERVED</span>
+      <div class="footer-social">
+        <a href="https://facebook.com/whoopleague" target="_blank" title="Facebook">f</a>
+        <a href="https://instagram.com/cwl.czech" target="_blank" title="Instagram">◎</a>
+        <a href="https://youtube.com/@whoopleague" target="_blank" title="YouTube">▶</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
