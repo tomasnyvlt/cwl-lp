@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CWL Brand Manual 2026 – Blue Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:        #06080f;
+    --deep:         #080c18;
+    --blue:         #1A6BFF;
+    --blue-bright:  #2979FF;
+    --blue-glow:    #4D9FFF;
+    --blue-dark:    #1050CC;
+    --blue-subtle:  #0e1a35;
+    --cyan:         #00CFFF;
+    --white:        #ffffff;
+    --off-white:    #e8eef8;
+    --gray:         #7a8aaa;
+    --gray-light:   #111827;
+    --surface:      #0d1420;
+    --border:       rgba(26,107,255,0.2);
+    --border-dim:   rgba(255,255,255,0.06);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--black);
+    color: var(--white);
+  }
+
+  /* ─── COVER ─── */
+  .cover {
+    min-height: 100vh;
+    background: var(--black);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .cover-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(26,107,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,107,255,0.07) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .cover-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    right: -100px; top: 50%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle, rgba(26,107,255,0.2) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .cover-glow-2 {
+    position: absolute;
+    width: 300px; height: 300px;
+    left: 10%; bottom: 10%;
+    background: radial-gradient(circle, rgba(0,207,255,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .cover-top {
+    position: relative;
+    z-index: 2;
+    padding: 40px 56px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .cover-logo-text-wrap { display: flex; flex-direction: column; line-height: 1; }
+  .cover-logo-text-wrap span:first-child {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+  }
+  .cover-logo-text-wrap span:last-child {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--blue-glow);
+    text-transform: uppercase;
+  }
+
+  .cover-body {
+    position: relative;
+    z-index: 2;
+    padding: 0 56px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 60px;
+  }
+
+  .cover-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 96px;
+    line-height: 0.85;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .cover-title .accent {
+    background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cover-meta {
+    border-left: 3px solid var(--blue);
+    padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .cover-meta-item label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .cover-meta-item p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .cover-meta-item .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--cyan);
+  }
+
+  .cover-edition {
+    position: absolute;
+    bottom: 80px;
+    right: 56px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #1a2a45;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .kit-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 56px;
+  }
+
+  .kit-section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .kit-section:last-child { border-bottom: none; }
+
+  /* Section header */
+  .kit-sec-header {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .kit-sec-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: var(--blue-glow);
+    white-space: nowrap;
+  }
+
+  .kit-sec-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 42px;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--white);
+  }
+
+  /* ─── COLORS ─── */
+  .color-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: 1px solid var(--border-dim);
+  }
+
+  .color-swatch {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .swatch-block {
+    height: 140px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+  }
+
+  .swatch-block.primary {
+    background: var(--blue);
+    box-shadow: 0 0 60px rgba(26,107,255,0.4) inset;
+  }
+  .swatch-block.bright  { background: var(--blue-bright); }
+  .swatch-block.glow    { background: var(--blue-glow); }
+  .swatch-block.cyan    {
+    background: var(--cyan);
+    box-shadow: 0 0 40px rgba(0,207,255,0.3) inset;
+  }
+  .swatch-block.dark-blue { background: var(--blue-dark); }
+  .swatch-block.black-s { background: var(--black); border: 1px solid #1a2a3a; }
+  .swatch-block.surface-s { background: var(--surface); }
+  .swatch-block.subtle-s { background: var(--blue-subtle); }
+  .swatch-block.white-s { background: var(--white); }
+  .swatch-block.gray-s  { background: var(--gray); }
+
+  .swatch-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+
+  .swatch-label.dark-text { color: rgba(0,0,0,0.6); background: rgba(0,0,0,0.1); }
+
+  .swatch-info {
+    padding: 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--border-dim);
+  }
+
+  .swatch-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .swatch-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--blue-glow);
+  }
+
+  .swatch-role {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  .color-row-2 {
+    margin-top: 2px;
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  .type-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border-dim);
+  }
+
+  .type-card {
+    background: var(--surface);
+    padding: 40px;
+  }
+
+  .type-specimen {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 80px;
+    line-height: 0.85;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--white) 50%, var(--blue-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .type-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blue-glow);
+    margin-bottom: 12px;
+  }
+
+  .type-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--gray);
+    line-height: 1.8;
+    border-top: 1px solid var(--border-dim);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  .type-body-specimen {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--gray);
+    margin-bottom: 16px;
+  }
+
+  .type-scale {
+    background: var(--surface);
+    padding: 40px;
+    grid-column: span 2;
+    border-top: 2px solid var(--border-dim);
+  }
+
+  .scale-row {
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .scale-row:last-child { border-bottom: none; }
+
+  .scale-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray);
+    min-width: 120px;
+  }
+
+  .scale-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── LOGO ─── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border-dim);
+  }
+
+  .logo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 56px 40px 40px;
+    position: relative;
+  }
+
+  .logo-card.dark  { background: var(--black); }
+  .logo-card.mid   { background: var(--surface); }
+  .logo-card.light { background: var(--off-white); }
+  .logo-card.blue-bg {
+    background: var(--blue);
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue-bright));
+  }
+  .logo-card.gradient-bg {
+    background: linear-gradient(135deg, #060c1e, #0e1a35);
+  }
+
+  .logo-tag {
+    position: absolute;
+    top: 16px; left: 16px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .logo-tag.light-tag { color: rgba(0,0,0,0.4); }
+
+  .logo-render {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-render-text { display: flex; flex-direction: column; line-height: 1; }
+
+  .logo-render-text .cwl-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 36px;
+    letter-spacing: 0.06em;
+  }
+
+  .logo-render-text .cwl-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  /* Icon only */
+  .logo-icon-only { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+  /* Wordmark */
+  .wordmark {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 48px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Logo size note */
+  .logo-size-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gray);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn-showcase {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border-dim);
+  }
+
+  .btn-card {
+    background: var(--surface);
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .btn-card-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  .demo-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--blue);
+    color: var(--white);
+    padding: 16px 32px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    box-shadow: 0 0 30px rgba(26,107,255,0.4);
+    cursor: pointer;
+  }
+
+  .demo-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--white);
+    padding: 16px 32px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    cursor: pointer;
+  }
+
+  .demo-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--blue-glow);
+    padding: 14px 28px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 1px solid var(--blue);
+    cursor: pointer;
+    background: rgba(26,107,255,0.08);
+  }
+
+  .demo-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    background: var(--blue);
+    color: var(--white);
+    padding: 9px 22px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(26,107,255,0.4);
+  }
+
+  .btn-spec {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray);
+    line-height: 1.7;
+  }
+
+  /* ─── ICONOGRAPHY ─── */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+    background: var(--border-dim);
+  }
+
+  .icon-cell {
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    gap: 12px;
+    transition: background 0.2s;
+  }
+
+  .icon-cell:hover { background: var(--blue-subtle); }
+
+  .icon-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gray);
+    text-align: center;
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── UI COMPONENTS EXAMPLE ─── */
+  .component-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border-dim);
+  }
+
+  .component-card {
+    background: var(--surface);
+    padding: 40px;
+  }
+
+  /* Race card demo */
+  .demo-race-card {
+    background: var(--black);
+    padding: 28px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .demo-race-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+  }
+
+  .demo-race-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--blue-glow);
+    margin-bottom: 12px;
+  }
+
+  .demo-race-img {
+    width: 100%; height: 80px;
+    background: var(--blue-subtle);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .demo-race-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .demo-race-meta { font-size: 13px; color: var(--gray); }
+  .demo-race-meta strong { color: var(--white); display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; }
+
+  /* Stat badge demo */
+  .demo-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .demo-badge {
+    background: rgba(13,20,32,0.9);
+    border: 1px solid var(--border);
+    padding: 12px 18px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+
+  .demo-badge .num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    line-height: 1;
+  }
+
+  .demo-badge .lbl {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  /* ─── MOTION ─── */
+  .motion-section {
+    background: var(--surface);
+    border: 1px solid var(--border-dim);
+    padding: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .motion-item { display: flex; flex-direction: column; gap: 12px; }
+
+  .motion-preview {
+    height: 80px;
+    background: var(--black);
+    border: 1px solid var(--border-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .anim-slide {
+    width: 40px; height: 6px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    animation: slide 2s ease-in-out infinite;
+  }
+
+  @keyframes slide {
+    0%, 100% { transform: translateX(-60px); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateX(60px); opacity: 0; }
+  }
+
+  .anim-pulse-dot {
+    width: 20px; height: 20px;
+    background: var(--blue);
+    border-radius: 50%;
+    animation: anim-pulse 2s ease-in-out infinite;
+    box-shadow: 0 0 0 0 rgba(26,107,255,0.4);
+  }
+
+  @keyframes anim-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(26,107,255,0.5); }
+    70% { box-shadow: 0 0 0 20px rgba(26,107,255,0); }
+    100% { box-shadow: 0 0 0 0 rgba(26,107,255,0); }
+  }
+
+  .anim-spin-ring {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    border-top-color: var(--blue);
+    border-right-color: var(--cyan);
+    animation: anim-spin 1.5s linear infinite;
+  }
+
+  @keyframes anim-spin { to { transform: rotate(360deg); } }
+
+  .motion-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--white);
+  }
+
+  .motion-spec {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ─── DO / DON'T ─── */
+  .dos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border-dim);
+    margin-top: 48px;
+  }
+
+  .do-card { background: rgba(26,107,255,0.06); border-top: 3px solid var(--blue); padding: 36px; }
+  .dont-card { background: rgba(255,60,60,0.04); border-top: 3px solid #ff3c3c; padding: 36px; }
+
+  .do-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.25em; text-transform: uppercase; color: var(--blue-glow); margin-bottom: 16px; }
+  .dont-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.25em; text-transform: uppercase; color: #ff6060; margin-bottom: 16px; }
+
+  .do-list, .dont-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .do-list li, .dont-list li {
+    font-size: 14px;
+    color: var(--gray);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .do-list li::before { content: '✓'; position: absolute; left: 0; color: var(--blue); font-weight: 900; }
+  .dont-list li::before { content: '✕'; position: absolute; left: 0; color: #ff6060; font-weight: 900; }
+
+  /* ─── GRADIENT PALETTE ─── */
+  .gradient-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border-dim);
+    margin-top: 32px;
+  }
+
+  .gradient-card {
+    height: 120px;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    position: relative;
+  }
+
+  .gradient-card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.4);
+    padding: 4px 8px;
+    border-radius: 2px;
+  }
+
+  /* ─── SPACING ─── */
+  .spacing-demo {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    margin-top: 32px;
+    padding: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border-dim);
+  }
+
+  .space-block {
+    background: var(--blue);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 8px;
+    min-width: 48px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .space-block:hover { opacity: 1; }
+
+  .space-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--white);
+    text-align: center;
+  }
+
+  /* ─── BACK TO TOP ─── */
+  .back-top {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    width: 48px; height: 48px;
+    background: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 20px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+    box-shadow: 0 0 24px rgba(26,107,255,0.5);
+    transition: box-shadow 0.2s;
+    z-index: 50;
+  }
+
+  .back-top:hover { box-shadow: 0 0 40px rgba(26,107,255,0.8); }
+
+  /* ─── NAV SIDEBAR ─── */
+  .kit-nav {
+    position: fixed;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 16px 0;
+    background: rgba(6,8,15,0.8);
+    border-right: 1px solid var(--border-dim);
+    backdrop-filter: blur(8px);
+  }
+
+  .kit-nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+
+  .kit-nav a::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--gray);
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .kit-nav a:hover { color: var(--blue-glow); background: rgba(26,107,255,0.08); }
+  .kit-nav a:hover::before { background: var(--blue); }
+</style>
+</head>
+<body>
+
+<!-- Sidebar nav -->
+<nav class="kit-nav">
+  <a href="#cover">Cover</a>
+  <a href="#colors">Barvy</a>
+  <a href="#gradients">Gradienty</a>
+  <a href="#typography">Typografie</a>
+  <a href="#logo">Logo</a>
+  <a href="#buttons">Buttons</a>
+  <a href="#components">Komponenty</a>
+  <a href="#iconography">Ikonografie</a>
+  <a href="#motion">Animace</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#rules">Pravidla</a>
+</nav>
+
+<a href="#cover" class="back-top">↑</a>
+
+<!-- ─── COVER ─── -->
+<div class="cover" id="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-glow-2"></div>
+
+  <div class="cover-top">
+    <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+      <circle cx="8"  cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="32" cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="8"  cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="32" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+      <circle cx="20" cy="20" r="5" fill="#1A6BFF"/>
+      <circle cx="20" cy="20" r="3" fill="#00CFFF"/>
+      <line x1="12" y1="8"  x2="27" y2="8"  stroke="#4D9FFF" stroke-width="1.5"/>
+      <line x1="12" y1="32" x2="27" y2="32" stroke="#4D9FFF" stroke-width="1.5"/>
+      <line x1="8"  y1="12" x2="8"  y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+      <line x1="32" y1="12" x2="32" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+    </svg>
+    <div class="cover-logo-text-wrap">
+      <span>CWL</span>
+      <span>Czech Whoop League</span>
+    </div>
+  </div>
+
+  <div class="cover-body">
+    <h1 class="cover-title">
+      BRAND<br>
+      <span class="accent">MA</span>NUAL<br>
+      2026
+    </h1>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>Edice</label>
+        <p>Blue Edition</p>
+        <span class="mono">v3.0-blue</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Primární barva</label>
+        <p>Electric Blue</p>
+        <span class="mono">#1A6BFF → #00CFFF</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Font</label>
+        <p>Barlow Condensed</p>
+        <span class="mono">900 / 800 / 700</span>
+      </div>
+      <div class="cover-meta-item">
+        <label>Slogan</label>
+        <p>Malé drony. Velké zážitky.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-edition">Czech Whoop League · Brand Manual · Blue Edition · 2026</div>
+</div>
+
+<!-- ─── COLORS ─── -->
+<div class="kit-page">
+  <section class="kit-section" id="colors">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">01 · Barevná paleta</span>
+      <h2 class="kit-sec-title">Primární barvy</h2>
+    </div>
+
+    <div class="color-row">
+      <div class="color-swatch">
+        <div class="swatch-block primary">
+          <span class="swatch-label">PRIMARY</span>
+        </div>
+        <div class="swatch-info">
+          <div class="swatch-name">Blue</div>
+          <div class="swatch-hex">#1A6BFF</div>
+          <div class="swatch-role">Hlavní akcent, CTA tlačítka</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block bright">
+          <span class="swatch-label">BRIGHT</span>
+        </div>
+        <div class="swatch-info">
+          <div class="swatch-name">Blue Bright</div>
+          <div class="swatch-hex">#2979FF</div>
+          <div class="swatch-role">Hover stavy, aktivní prvky</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block glow">
+          <span class="swatch-label">GLOW</span>
+        </div>
+        <div class="swatch-info">
+          <div class="swatch-name">Blue Glow</div>
+          <div class="swatch-hex">#4D9FFF</div>
+          <div class="swatch-role">Labels, ikony, subtext</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block cyan">
+          <span class="swatch-label dark-text">CYAN</span>
+        </div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cyan</div>
+          <div class="swatch-hex">#00CFFF</div>
+          <div class="swatch-role">Gradient koncový bod, links</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-block dark-blue">
+          <span class="swatch-label">DARK</span>
+        </div>
+        <div class="swatch-info">
+          <div class="swatch-name">Blue Dark</div>
+          <div class="swatch-hex">#1050CC</div>
+          <div class="swatch-role">Hover tlačítek, pozadí sekcí</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px;">
+      <div class="kit-sec-header" style="margin-bottom: 24px;">
+        <span class="kit-sec-num">01b · Barevná paleta</span>
+        <h2 class="kit-sec-title" style="font-size: 28px;">Neutrální barvy</h2>
+      </div>
+      <div class="color-row">
+        <div class="color-swatch">
+          <div class="swatch-block black-s"><span class="swatch-label">BASE</span></div>
+          <div class="swatch-info"><div class="swatch-name">Black</div><div class="swatch-hex">#06080F</div><div class="swatch-role">Primární pozadí</div></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block surface-s"><span class="swatch-label">SURFACE</span></div>
+          <div class="swatch-info"><div class="swatch-name">Surface</div><div class="swatch-hex">#0D1420</div><div class="swatch-role">Karty, sekce</div></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block subtle-s"><span class="swatch-label">SUBTLE</span></div>
+          <div class="swatch-info"><div class="swatch-name">Blue Subtle</div><div class="swatch-hex">#0E1A35</div><div class="swatch-role">Hover pozadí</div></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block gray-s"><span class="swatch-label">GRAY</span></div>
+          <div class="swatch-info"><div class="swatch-name">Gray</div><div class="swatch-hex">#7A8AAA</div><div class="swatch-role">Body text, popis</div></div>
+        </div>
+        <div class="color-swatch">
+          <div class="swatch-block white-s"><span class="swatch-label dark-text">WHITE</span></div>
+          <div class="swatch-info"><div class="swatch-name">White</div><div class="swatch-hex">#FFFFFF</div><div class="swatch-role">Primární text</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── GRADIENTS ─── -->
+  <section class="kit-section" id="gradients">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">02 · Gradienty</span>
+      <h2 class="kit-sec-title">Gradient systém</h2>
+    </div>
+
+    <div class="gradient-row">
+      <div class="gradient-card" style="background: linear-gradient(135deg, #1A6BFF, #00CFFF);">
+        <span class="gradient-card-label">Primary Hero<br>#1A6BFF → #00CFFF · 135°</span>
+      </div>
+      <div class="gradient-card" style="background: linear-gradient(135deg, #1050CC, #2979FF);">
+        <span class="gradient-card-label">Dark Blue<br>#1050CC → #2979FF · 135°</span>
+      </div>
+      <div class="gradient-card" style="background: linear-gradient(180deg, #06080f, #0e1a35);">
+        <span class="gradient-card-label">Background Dark<br>#06080F → #0E1A35 · 180°</span>
+      </div>
+      <div class="gradient-card" style="background: radial-gradient(circle at 30% 50%, rgba(26,107,255,0.4) 0%, transparent 65%), #06080f;">
+        <span class="gradient-card-label">Hero Glow<br>Radial · rgba(26,107,255,0.4)</span>
+      </div>
+    </div>
+
+    <div class="gradient-row" style="margin-top: 2px;">
+      <div class="gradient-card" style="background: linear-gradient(90deg, #06080f, #1A6BFF, #00CFFF, #06080f);">
+        <span class="gradient-card-label">Ticker Bar<br>90° loop gradient</span>
+      </div>
+      <div class="gradient-card" style="background: linear-gradient(135deg, #06080f 0%, #0e1a35 50%, #06080f 100%);">
+        <span class="gradient-card-label">Section BG<br>Subtle dark</span>
+      </div>
+      <div class="gradient-card" style="background: linear-gradient(135deg, #ffffff 40%, #4D9FFF);">
+        <span class="gradient-card-label">Text Gradient<br>White → Blue Glow</span>
+      </div>
+      <div class="gradient-card" style="background: linear-gradient(135deg, rgba(26,107,255,0.15), rgba(0,207,255,0.05));">
+        <span class="gradient-card-label">Glass Surface<br>Transparent accent</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── TYPOGRAPHY ─── -->
+  <section class="kit-section" id="typography">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">03 · Typografie</span>
+      <h2 class="kit-sec-title">Font systém</h2>
+    </div>
+
+    <div class="type-showcase">
+      <div class="type-card">
+        <div class="type-label">Display / Headline</div>
+        <div class="type-specimen">CWL<br>2026</div>
+        <div class="type-meta">
+          Font: Barlow Condensed<br>
+          Weight: 900 (Black)<br>
+          Transform: uppercase<br>
+          Tracking: -0.01em → 0.06em<br>
+          Use: nadpisy, hero, logo text
+        </div>
+      </div>
+      <div class="type-card">
+        <div class="type-label">Body / UI</div>
+        <div class="type-body-specimen" style="font-size:14px; margin-top: 12px;">Stále plánujeme společné tréninky na různých místech v Praze a okolí. Připoj se ke komunitě FPV pilotů.</div>
+        <div class="type-meta">
+          Font: Barlow<br>
+          Weight: 400 / 500 / 600<br>
+          Size: 14px – 16px<br>
+          Line-height: 1.65 – 1.75<br>
+          Use: body copy, descriptions
+        </div>
+      </div>
+      <div class="type-scale">
+        <div class="type-label" style="margin-bottom: 24px;">Typografická škála</div>
+        <div class="scale-row">
+          <span class="scale-label">Hero / 108px</span>
+          <span class="scale-text" style="font-size: 52px; line-height:1">Závody</span>
+        </div>
+        <div class="scale-row">
+          <span class="scale-label">H1 / 68px</span>
+          <span class="scale-text" style="font-size: 44px; line-height:1">Czech Whoop League</span>
+        </div>
+        <div class="scale-row">
+          <span class="scale-label">H2 / 42px</span>
+          <span class="scale-text" style="font-size: 32px; line-height:1">Nejbližší závody 2026</span>
+        </div>
+        <div class="scale-row">
+          <span class="scale-label">H3 / 28px</span>
+          <span class="scale-text" style="font-size: 22px; line-height:1">3. Ligový závod – Hostivice</span>
+        </div>
+        <div class="scale-row">
+          <span class="scale-label">Label / 11px</span>
+          <span class="scale-text" style="font-size: 11px; letter-spacing: 0.3em; color: #4D9FFF;">01 · Kalendář závodů</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── LOGO ─── -->
+  <section class="kit-section" id="logo">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">04 · Logo systém</span>
+      <h2 class="kit-sec-title">Logo a variace</h2>
+    </div>
+
+    <div class="logo-grid">
+      <!-- Primary on dark -->
+      <div class="logo-card dark">
+        <span class="logo-tag">Primární / tmavé pozadí</span>
+        <div class="logo-render">
+          <svg width="52" height="52" viewBox="0 0 40 40" fill="none">
+            <circle cx="8"  cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="32" cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="8"  cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="32" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="5" fill="#1A6BFF"/>
+            <circle cx="20" cy="20" r="3" fill="#00CFFF"/>
+            <line x1="12" y1="8" x2="27" y2="8" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="12" y1="32" x2="27" y2="32" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="8" y1="12" x2="8" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="32" y1="12" x2="32" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+          </svg>
+          <div class="logo-render-text">
+            <span class="cwl-text" style="color: #fff;">CWL</span>
+            <span class="cwl-sub" style="color: #4D9FFF;">Czech Whoop League</span>
+          </div>
+        </div>
+        <span class="logo-size-note">Min. výška: 32px</span>
+      </div>
+
+      <!-- On blue gradient -->
+      <div class="logo-card blue-bg">
+        <span class="logo-tag">Na modrém pozadí</span>
+        <div class="logo-render">
+          <svg width="52" height="52" viewBox="0 0 40 40" fill="none">
+            <circle cx="8"  cy="8"  r="5" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+            <circle cx="32" cy="8"  r="5" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+            <circle cx="8"  cy="32" r="5" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+            <circle cx="32" cy="32" r="5" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="5" fill="white"/>
+            <circle cx="20" cy="20" r="3" fill="rgba(0,207,255,0.8)"/>
+            <line x1="12" y1="8" x2="27" y2="8" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+            <line x1="12" y1="32" x2="27" y2="32" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+            <line x1="8" y1="12" x2="8" y2="27" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+            <line x1="32" y1="12" x2="32" y2="27" stroke="rgba(255,255,255,0.7)" stroke-width="1.5"/>
+          </svg>
+          <div class="logo-render-text">
+            <span class="cwl-text" style="color: #fff;">CWL</span>
+            <span class="cwl-sub" style="color: rgba(255,255,255,0.6);">Czech Whoop League</span>
+          </div>
+        </div>
+        <span class="logo-size-note" style="color: rgba(255,255,255,0.4);">Bílá varianta</span>
+      </div>
+
+      <!-- On light -->
+      <div class="logo-card light">
+        <span class="logo-tag light-tag">Na světlém pozadí</span>
+        <div class="logo-render">
+          <svg width="52" height="52" viewBox="0 0 40 40" fill="none">
+            <circle cx="8"  cy="8"  r="5" stroke="#1A6BFF" stroke-width="1.5"/>
+            <circle cx="32" cy="8"  r="5" stroke="#1A6BFF" stroke-width="1.5"/>
+            <circle cx="8"  cy="32" r="5" stroke="#1A6BFF" stroke-width="1.5"/>
+            <circle cx="32" cy="32" r="5" stroke="#1A6BFF" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="5" fill="#1A6BFF"/>
+            <circle cx="20" cy="20" r="3" fill="#00CFFF"/>
+            <line x1="12" y1="8" x2="27" y2="8" stroke="#1A6BFF" stroke-width="1.5"/>
+            <line x1="12" y1="32" x2="27" y2="32" stroke="#1A6BFF" stroke-width="1.5"/>
+            <line x1="8" y1="12" x2="8" y2="27" stroke="#1A6BFF" stroke-width="1.5"/>
+            <line x1="32" y1="12" x2="32" y2="27" stroke="#1A6BFF" stroke-width="1.5"/>
+          </svg>
+          <div class="logo-render-text">
+            <span class="cwl-text" style="color: #06080f;">CWL</span>
+            <span class="cwl-sub" style="color: #1A6BFF;">Czech Whoop League</span>
+          </div>
+        </div>
+        <span class="logo-size-note" style="color: rgba(0,0,0,0.3);">Tmavá varianta</span>
+      </div>
+
+      <!-- Icon only -->
+      <div class="logo-card gradient-bg">
+        <span class="logo-tag">Jen ikona</span>
+        <div class="logo-icon-only">
+          <svg width="80" height="80" viewBox="0 0 40 40" fill="none" style="filter: drop-shadow(0 0 20px rgba(26,107,255,0.6))">
+            <circle cx="8"  cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="32" cy="8"  r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="8"  cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="32" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="5" fill="#1A6BFF"/>
+            <circle cx="20" cy="20" r="3" fill="#00CFFF"/>
+            <line x1="12" y1="8" x2="27" y2="8" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="12" y1="32" x2="27" y2="32" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="8" y1="12" x2="8" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+            <line x1="32" y1="12" x2="32" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="logo-size-note">Favicon / Avatar use</span>
+      </div>
+
+      <!-- Wordmark only -->
+      <div class="logo-card mid">
+        <span class="logo-tag">Wordmark</span>
+        <div class="wordmark" style="background: linear-gradient(135deg, #fff 40%, #4D9FFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">CWL</div>
+        <span class="logo-size-note">Standalone · min 48px</span>
+      </div>
+
+      <!-- Monochrome -->
+      <div class="logo-card mid" style="background: #111;">
+        <span class="logo-tag">Monochromatická</span>
+        <div class="logo-render">
+          <svg width="44" height="44" viewBox="0 0 40 40" fill="none">
+            <circle cx="8"  cy="8"  r="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="32" cy="8"  r="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="8"  cy="32" r="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="32" cy="32" r="5" stroke="white" stroke-width="1.5"/>
+            <circle cx="20" cy="20" r="5" fill="white"/>
+            <line x1="12" y1="8" x2="27" y2="8" stroke="white" stroke-width="1.5"/>
+            <line x1="12" y1="32" x2="27" y2="32" stroke="white" stroke-width="1.5"/>
+            <line x1="8" y1="12" x2="8" y2="27" stroke="white" stroke-width="1.5"/>
+            <line x1="32" y1="12" x2="32" y2="27" stroke="white" stroke-width="1.5"/>
+          </svg>
+          <div class="logo-render-text">
+            <span class="cwl-text" style="color: #fff;">CWL</span>
+            <span class="cwl-sub" style="color: rgba(255,255,255,0.5);">Czech Whoop League</span>
+          </div>
+        </div>
+        <span class="logo-size-note">Černobílý tisk</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BUTTONS ─── -->
+  <section class="kit-section" id="buttons">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">05 · Tlačítka</span>
+      <h2 class="kit-sec-title">Button systém</h2>
+    </div>
+
+    <div class="btn-showcase">
+      <div class="btn-card">
+        <span class="btn-card-label">Primary CTA</span>
+        <button class="demo-btn-primary">Jak začít →</button>
+        <div class="btn-spec">
+          bg: #1A6BFF<br>
+          hover: #2979FF + glow<br>
+          clip-path: chamfer 10px<br>
+          font: Barlow Condensed 800<br>
+          padding: 16px 34px<br>
+          tracking: 0.14em
+        </div>
+      </div>
+      <div class="btn-card">
+        <span class="btn-card-label">Secondary</span>
+        <button class="demo-btn-secondary">Kalendář závodů</button>
+        <div class="btn-spec">
+          bg: transparent<br>
+          border: 1px solid rgba(26,107,255,0.2)<br>
+          hover: border → #1A6BFF<br>
+          clip-path: chamfer 10px<br>
+          font: Barlow Condensed 700
+        </div>
+      </div>
+      <div class="btn-card">
+        <span class="btn-card-label">Ghost / Outline</span>
+        <button class="demo-btn-ghost">Pravidla soutěže</button>
+        <div class="btn-spec">
+          bg: rgba(26,107,255,0.08)<br>
+          border: 1px solid #1A6BFF<br>
+          color: #4D9FFF<br>
+          hover: bg opacity ↑<br>
+          font: Barlow Condensed 700
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── COMPONENTS ─── -->
+  <section class="kit-section" id="components">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">06 · Komponenty</span>
+      <h2 class="kit-sec-title">UI prvky</h2>
+    </div>
+
+    <div class="component-showcase">
+      <div class="component-card">
+        <div class="type-label" style="margin-bottom: 20px;">Race Card</div>
+        <div class="demo-race-card">
+          <div class="demo-race-num">02 / Ligový závod</div>
+          <div class="demo-race-img">🏁</div>
+          <div class="demo-race-title">2. Ligový závod</div>
+          <div class="demo-race-meta">
+            <strong>28. února 2026</strong>
+            📍 Hostivice, Praha-západ
+          </div>
+          <div style="margin-top: 16px;">
+            <button class="demo-btn-primary" style="padding: 10px 22px; font-size: 13px;">Přihlásit se →</button>
+          </div>
+        </div>
+      </div>
+      <div class="component-card">
+        <div class="type-label" style="margin-bottom: 20px;">Stat Badges</div>
+        <div class="demo-badges">
+          <div class="demo-badge">
+            <span class="num">6</span>
+            <span class="lbl">Závodů / sezóna</span>
+          </div>
+          <div class="demo-badge">
+            <span class="num">40+</span>
+            <span class="lbl">Aktivních pilotů</span>
+          </div>
+          <div class="demo-badge">
+            <span class="num">1s</span>
+            <span class="lbl">FPV Whoop</span>
+          </div>
+        </div>
+        <div style="margin-top: 32px;">
+          <div class="type-label" style="margin-bottom: 12px;">Nav CTA</div>
+          <button class="demo-nav-cta">Přihlásit →</button>
+        </div>
+        <div style="margin-top: 32px;">
+          <div class="type-label" style="margin-bottom: 12px;">Section Label</div>
+          <div style="font-family: 'Barlow Condensed'; font-size: 11px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: #4D9FFF; display: flex; align-items: center; gap: 14px;">
+            <span style="width: 28px; height: 2px; background: linear-gradient(90deg, #1A6BFF, #00CFFF); display: block; flex-shrink: 0;"></span>
+            01 · Kalendář závodů
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ICONOGRAPHY ─── -->
+  <section class="kit-section" id="iconography">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">07 · Ikonografie</span>
+      <h2 class="kit-sec-title">Ikony a symboly</h2>
+    </div>
+
+    <div class="icon-grid">
+      <div class="icon-cell">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <circle cx="8" cy="8" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+          <circle cx="32" cy="8" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+          <circle cx="8" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="5" stroke="#4D9FFF" stroke-width="1.5"/>
+          <circle cx="20" cy="20" r="5" fill="#1A6BFF"/>
+          <circle cx="20" cy="20" r="3" fill="#00CFFF"/>
+          <line x1="12" y1="8" x2="27" y2="8" stroke="#4D9FFF" stroke-width="1.5"/>
+          <line x1="12" y1="32" x2="27" y2="32" stroke="#4D9FFF" stroke-width="1.5"/>
+          <line x1="8" y1="12" x2="8" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+          <line x1="32" y1="12" x2="32" y2="27" stroke="#4D9FFF" stroke-width="1.5"/>
+        </svg>
+        <span class="icon-label">Logo mark</span>
+      </div>
+      <div class="icon-cell">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4D9FFF" stroke-width="1.5" stroke-linecap="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        <span class="icon-label">Trofej / výhry</span>
+      </div>
+      <div class="icon-cell">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4D9FFF" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span class="icon-label">Čas / timer</span>
+      </div>
+      <div class="icon-cell">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4D9FFF" stroke-width="1.5" stroke-linecap="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <span class="icon-label">Lokace závodu</span>
+      </div>
+      <div class="icon-cell">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4D9FFF" stroke-width="1.5" stroke-linecap="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        <span class="icon-label">Datum závodu</span>
+      </div>
+      <div class="icon-cell">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#4D9FFF" stroke-width="1.5" stroke-linecap="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span class="icon-label">Komunita</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MOTION ─── -->
+  <section class="kit-section" id="motion">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">08 · Animace</span>
+      <h2 class="kit-sec-title">Motion design</h2>
+    </div>
+
+    <div class="motion-section">
+      <div class="motion-item">
+        <div class="motion-preview">
+          <div class="anim-slide"></div>
+        </div>
+        <div class="motion-title">Slide In</div>
+        <div class="motion-spec">
+          Scroll reveal efekt<br>
+          Duration: 550ms<br>
+          Easing: ease<br>
+          Y: 22px → 0<br>
+          Opacity: 0 → 1
+        </div>
+      </div>
+      <div class="motion-item">
+        <div class="motion-preview">
+          <div class="anim-pulse-dot"></div>
+        </div>
+        <div class="motion-title">Pulse Glow</div>
+        <div class="motion-spec">
+          Live/aktivní stav<br>
+          Duration: 2s<br>
+          Easing: ease-in-out<br>
+          box-shadow pulse<br>
+          Infinite loop
+        </div>
+      </div>
+      <div class="motion-item">
+        <div class="motion-preview">
+          <div class="anim-spin-ring"></div>
+        </div>
+        <div class="motion-title">Ring Spin</div>
+        <div class="motion-spec">
+          Hero drone animace<br>
+          Duration: 22s / 16s<br>
+          Easing: linear<br>
+          Střídavé směry<br>
+          Více vrstev
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SPACING ─── -->
+  <section class="kit-section" id="spacing">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">09 · Spacing</span>
+      <h2 class="kit-sec-title">Prostorový systém</h2>
+    </div>
+
+    <div class="spacing-demo">
+      <div class="space-block" style="height: 8px;"><span class="space-label">4px</span></div>
+      <div class="space-block" style="height: 16px;"><span class="space-label">8px</span></div>
+      <div class="space-block" style="height: 24px;"><span class="space-label">12px</span></div>
+      <div class="space-block" style="height: 32px;"><span class="space-label">16px</span></div>
+      <div class="space-block" style="height: 48px;"><span class="space-label">24px</span></div>
+      <div class="space-block" style="height: 64px;"><span class="space-label">32px</span></div>
+      <div class="space-block" style="height: 96px;"><span class="space-label">48px</span></div>
+      <div class="space-block" style="height: 128px;"><span class="space-label">64px</span></div>
+      <div class="space-block" style="height: 160px; opacity: 0.5;"><span class="space-label">80px</span></div>
+      <div class="space-block" style="height: 200px; opacity: 0.4;"><span class="space-label">100px</span></div>
+    </div>
+
+    <div style="margin-top: 32px; background: var(--surface); border: 1px solid var(--border-dim); padding: 32px;">
+      <div class="type-label" style="margin-bottom: 20px;">Layout grid</div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--gray); line-height: 2;">
+        Max width: <span style="color: var(--blue-glow);">1240px</span><br>
+        Page padding: <span style="color: var(--blue-glow);">48px (desktop) · 24px (mobile)</span><br>
+        Section padding: <span style="color: var(--blue-glow);">80–100px top/bottom</span><br>
+        Card gap: <span style="color: var(--blue-glow);">2px (hair gap pattern)</span><br>
+        Grid columns: <span style="color: var(--blue-glow);">1 / 2 / 3 / 4</span><br>
+        Breakpoint: <span style="color: var(--blue-glow);">960px</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── RULES ─── -->
+  <section class="kit-section" id="rules">
+    <div class="kit-sec-header">
+      <span class="kit-sec-num">10 · Pravidla</span>
+      <h2 class="kit-sec-title">Do &amp; Don't</h2>
+    </div>
+
+    <div class="dos-grid">
+      <div class="do-card">
+        <div class="do-label">✓ Používej</div>
+        <ul class="do-list">
+          <li>Barlow Condensed 900 pro všechny nadpisy</li>
+          <li>Uppercase text transform pro headline a labels</li>
+          <li>Electric Blue (#1A6BFF) jako primární CTA barvu</li>
+          <li>Gradient Blue → Cyan pro výrazné prvky a text effects</li>
+          <li>Chamfer clip-path (10px) na CTA tlačítkách</li>
+          <li>Tmavé pozadí (#06080F) jako primární canvas</li>
+          <li>2px "hair gap" pattern pro oddělení grid karet</li>
+          <li>Glow efekty (box-shadow) na primárních prvcích</li>
+          <li>Scan line pattern pro hero sekci</li>
+          <li>Letter-spacing 0.2–0.35em pro labels</li>
+        </ul>
+      </div>
+      <div class="dont-card">
+        <div class="dont-label">✕ Vyhni se</div>
+        <ul class="dont-list">
+          <li>Červená nebo jiné kontrastní barvy – tato edice je čistě modrá</li>
+          <li>Inter, Roboto, Arial nebo system fonts</li>
+          <li>Světlé pozadí (white/gray) jako primární plocha</li>
+          <li>Rounded corners na CTA tlačítkách – jen chamfer</li>
+          <li>Fialové gradienty (generický AI look)</li>
+          <li>Text bez uppercase na headline úrovni</li>
+          <li>Logo na barevném pozadí bez patřičné varianty</li>
+          <li>Víc než 3 různé modré odstíny na stejné ploše</li>
+          <li>Emoji jako ikonografii v produkčním UI</li>
+          <li>Logo menší než 32px výšky</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Footer -->
+<div style="background: var(--deep); border-top: 1px solid var(--border-dim); padding: 40px 56px; text-align: center;">
+  <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: #1a2a45;">
+    Czech Whoop League · Brand Manual 2026 · Blue Edition · v3.0 · whoopleague.cz
+  </div>
+</div>
+
+</body>
+</html>
